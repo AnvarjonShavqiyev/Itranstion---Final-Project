@@ -40,6 +40,7 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     discreption: req.body.discreption,
     image: newPath,
     topic: req.body.topic,
+    author: req.body.userId
   });
   try {
     const result = await collection.save();

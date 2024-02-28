@@ -6,6 +6,7 @@ const collectionSchema = mongoose.Schema({
   discreption: { type: String, require: true },
   topic: { type: String, require: true }, 
   image: { type: String},
+  author: {type: String},
   items: { type: Array}
 });
 

@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = Collection.find().exec();
+    const result = await Collection.find().exec();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
@@ -35,7 +35,7 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
   const newPath = await uploader(path);
   console.log(newPath);
   const collection = new Collection({
-    _id:  new mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     discreption: req.body.discreption,
     image: newPath,

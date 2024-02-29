@@ -52,7 +52,6 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     discreption: req.body.discreption,
     image: newPath,
     topic: req.body.topic,
-    author: req.body.userId,
   });
   try {
     const result = await collection.save();
@@ -69,7 +68,7 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
 router.delete("/:id", (req, res, next) => {
   Collection.findByIdAndDelete({ _id: req.params.id })
     .exec()
-    .then((result) => {
+    .then(() => {
       res.status(200).json({
         message: "Collection deleted",
         status: 200,
@@ -80,5 +79,30 @@ router.delete("/:id", (req, res, next) => {
         error: err,
       });
     });
+});
+router.patch("/:id", upload.single("image"), async (req, res, next) => {
+  try {
+    const uploader = async (path) => await cloudinary.uploads(path, "Images");
+    const image = req.file
+    const {path} = image
+    const newPath = await uploader(path);
+    const id = req.params.id;
+    const updates = {
+      name: req.body.name,
+      discreption: req.body.discreption,
+      image: newPath,
+      topic: req.body.topic,
+    }
+    const options = { new: true };
+    const result = await Collection.findByIdAndUpdate(id, updates, options);
+    res.status(200).json({
+      result,
+      message:"Collection updated"
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
 });
 module.exports = router;

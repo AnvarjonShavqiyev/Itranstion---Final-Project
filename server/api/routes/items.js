@@ -27,7 +27,19 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
-
+router.get("/:id", async (req, res, next) => {
+  try {
+    Items.findById(req.params.id)
+      .exec()
+      .then((result) => {
+        res.status(200).json(result);
+      });
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
+});
 router.post("/add-item", upload.single("image"), async (req, res, next) => {
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;

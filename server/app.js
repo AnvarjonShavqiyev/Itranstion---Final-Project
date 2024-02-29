@@ -22,6 +22,7 @@ app.use('/uploads', express.static('uploads'));
 
 const userRoutes = require("./api/routes/user");
 const collectionRoutes = require("./api/routes/collection");
+const itemRoutes = require("./api/routes/items");
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 
 app.use("/user", userRoutes);
 app.use("/collection", collectionRoutes);
+app.use("/item", itemRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("This route is not found");

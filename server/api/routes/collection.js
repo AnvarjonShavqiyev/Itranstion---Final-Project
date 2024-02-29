@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Collection.find().exec();
+    const result = await Collection.find().populate("items").exec();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
@@ -40,7 +40,7 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     discreption: req.body.discreption,
     image: newPath,
     topic: req.body.topic,
-    author: req.body.userId
+    author: req.body.userId,
   });
   try {
     const result = await collection.save();

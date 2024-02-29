@@ -90,4 +90,29 @@ router.delete("/:id", (req, res, next) => {
       });
     });
 });
+router.patch("/:id", upload.single("image"), async (req, res, next) => {
+  try {
+    const uploader = async (path) => await cloudinary.uploads(path, "Images");
+    const image = req.file
+    const {path} = image
+    const newPath = await uploader(path);
+    const id = req.params.id;
+    const updates = {
+      name: req.body.name,
+      image: newPath,
+      tags: req.body.tags,
+      additionalInfo: req.body.additionalInfo,
+    }
+    const options = { new: true };
+    const result = await Items.findByIdAndUpdate(id, updates, options);
+    res.status(200).json({
+      result,
+      message:"Item updated"
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
+});
 module.exports = router;

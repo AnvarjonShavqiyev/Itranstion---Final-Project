@@ -29,8 +29,12 @@ router.get("/", async (req, res, next) => {
 });
 router.get("/:id", async (req, res, next) => {
   try {
-    const result = await Collection.findOneById(req.params.id).populate("items").exec();
-    res.status(200).json(result);
+    Collection.findById(req.params.id)
+      .populate("items")
+      .exec()
+      .then((result) => {
+        res.status(200).json(result);
+      });
   } catch (error) {
     res.status(500).json({
       error: error,

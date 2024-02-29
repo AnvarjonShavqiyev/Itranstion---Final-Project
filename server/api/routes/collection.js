@@ -41,7 +41,6 @@ router.get("/:id", async (req, res, next) => {
     });
   }
 });
-
 router.post("/add-col", upload.single("image"), async (req, res, next) => {
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;
@@ -67,5 +66,19 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     });
   }
 });
-
+router.delete("/:id", (req, res, next) => {
+  Collection.findByIdAndDelete({ _id: req.params.id })
+    .exec()
+    .then((result) => {
+      res.status(200).json({
+        message: "Collection deleted",
+        status: 200,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 module.exports = router;

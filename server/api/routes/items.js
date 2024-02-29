@@ -75,5 +75,19 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     });
   }
 });
-
+router.delete("/:id", (req, res, next) => {
+  Items.findByIdAndDelete({ _id: req.params.id })
+    .exec()
+    .then(() => {
+      res.status(200).json({
+        message: "Item deleted",
+        status: 200,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 module.exports = router;

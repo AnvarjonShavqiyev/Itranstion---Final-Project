@@ -27,13 +27,22 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
+router.get("/:id", async (req, res, next) => {
+  try {
+    const result = await Collection.findOneById(req.params.id).populate("items").exec();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
+});
 
 router.post("/add-col", upload.single("image"), async (req, res, next) => {
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;
   const { path } = image;
   const newPath = await uploader(path);
-  console.log(newPath);
   const collection = new Collection({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,

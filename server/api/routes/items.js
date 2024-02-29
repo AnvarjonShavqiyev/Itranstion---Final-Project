@@ -46,7 +46,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
   const collection = await Collection.findById(req.body.collection_id);
 
   if (!collection) {
-    throw Error("Collection topilmadi");
+    throw Error("Collection not found");
   }
 
   collection.items.push(item.id);

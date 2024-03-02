@@ -5,6 +5,13 @@ const itemSchema = mongoose.Schema({
   name: { type: String, require: true },
   tags: { type: String, require: true },
   image: {type: String},
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "comments",
+    },
+  ],
+  likes: {type: Number},
   additionalInfo: {type: Array}
 });
 

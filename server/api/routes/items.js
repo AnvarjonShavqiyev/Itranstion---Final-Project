@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Items.find().exec();
+    const result = await Items.find().populate("comments").exec();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
@@ -30,10 +30,24 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     Items.findById(req.params.id)
+      .populate("comments")
       .exec()
       .then((result) => {
         res.status(200).json(result);
       });
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
+});
+router.get("/search/:name", async (req, res, next) => {
+  try {
+    const items = await Items.find().exec();
+    const result = items.filter((item) =>
+      item.name.startsWith(req.params.name)
+    );
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
       error: error,
@@ -93,8 +107,8 @@ router.delete("/:id", (req, res, next) => {
 router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
     const uploader = async (path) => await cloudinary.uploads(path, "Images");
-    const image = req.file
-    const {path} = image
+    const image = req.file;
+    const { path } = image;
     const newPath = await uploader(path);
     const id = req.params.id;
     const updates = {
@@ -102,12 +116,12 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       image: newPath,
       tags: req.body.tags,
       additionalInfo: req.body.additionalInfo,
-    }
+    };
     const options = { new: true };
     const result = await Items.findByIdAndUpdate(id, updates, options);
     res.status(200).json({
       result,
-      message:"Item updated"
+      message: "Item updated",
     });
   } catch (error) {
     res.status(500).json({

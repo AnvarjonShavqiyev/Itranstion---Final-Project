@@ -120,6 +120,38 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+router.post("/add-admin", async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const user = await User.findOne({ name: req.body.username });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    if (user.role === "admin") {
+      return res.status(500).json({
+        message: "User is already admin",
+      });
+    }
+
+    await User.findOneAndUpdate(
+      { name: req.body.username },
+      {
+        role: "admin",
+        promotedBy: req.body.promotedBy,
+      }
+    );
+    const result = await User.findOne({ name: req.body.username });
+    return res.status(200).json({
+      result: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error,
+    });
+  }
+});
 router.patch("/update", async (req, res, next) => {
   try {
     const userIds = req.body.userIds;

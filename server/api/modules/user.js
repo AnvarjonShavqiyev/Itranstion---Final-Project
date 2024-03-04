@@ -12,8 +12,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     enum: ["admin", "user"],
-    default: "user"
-  }
+    default: "user",
+  },
+  promotedBy: {type: String, default: "None"},
+  removedBy: {type: String, default: "None"}
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -134,12 +134,43 @@ router.post("/add-admin", async (req, res, next) => {
         message: "User is already admin",
       });
     }
-
     await User.findOneAndUpdate(
       { name: req.body.username },
       {
         role: "admin",
         promotedBy: req.body.promotedBy,
+        removedBy: "none"
+      }
+    );
+    const result = await User.findOne({ name: req.body.username });
+    return res.status(200).json({
+      result: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error,
+    });
+  }
+});
+router.post("/rm-admin", async (req, res, next) => {
+  try {
+    const user = await User.findOne({ name: req.body.username });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    if (user.role === "user") {
+      return res.status(500).json({
+        message: "User is not admin",
+      });
+    }
+    await User.findOneAndUpdate(
+      { name: req.body.username },
+      {
+        role: "user",
+        removedBy: req.body.removedBy,
+        promotedBy: "none"
       }
     );
     const result = await User.findOne({ name: req.body.username });

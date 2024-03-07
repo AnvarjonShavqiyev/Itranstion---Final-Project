@@ -20,15 +20,15 @@ const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
     const result = await Items.find().populate("comments").exec();
-    const tags = []
+    const tags = [];
     result.forEach(element => {
-       element.tags.forEach(tag => {
-          !tags.includes(tag) && tags.push(tag)
+      element.tags.split('#').forEach(tag => {
+          !tags.includes(tag) && tag.length > 0 && tags.push(tag)
        })
     });
     res.status(200).json({
       result: result,
-      tags: tags
+      tags: tags,
     });
   } catch (error) {
     res.status(500).json({

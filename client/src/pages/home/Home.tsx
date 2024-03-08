@@ -1,9 +1,20 @@
+import { useEffect, useState } from "react"
+import instance from "../../api/axios"
 import Nav from "../../components/nav/Nav"
 import { Container } from "../../utils/Utils"
 import './Home.scss'
+import { Link } from "react-router-dom"
+
 const Home:React.FC = () => {
+  const [items,setItems] = useState([])
+  useEffect(() => {
+    instance.get('/item')
+    .then(response => setItems(response.data))
+    .catch(error => console.log(error))
+  },[])
+  console.log(items)
   return (
-    <>
+    items && <>
       <Nav/>
       <Container>
         <div className="tag-cloud-wrapper">
@@ -12,8 +23,13 @@ const Home:React.FC = () => {
             <p>#tags</p>
           </div>
           <div className="tags-wrapper">
-            
+              {
+                items.tags && items.tags.map((tag:string, index: number) => {
+                   return <Link className="tagName" to='/search' key={index}>#{tag}</Link>
+                })
+              }
           </div>
+          <div className=""></div>
         </div>
       </Container>
     </>

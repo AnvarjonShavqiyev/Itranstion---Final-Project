@@ -29,7 +29,6 @@ export default function SignIn() {
           localStorage.setItem("Token", response.data.token);
           localStorage.setItem("username", response.data.username);
           localStorage.setItem("userid", response.data.id);
-          console.log(response);
           setTimeout(() => {
             navigate("/home");
           }, 2000);

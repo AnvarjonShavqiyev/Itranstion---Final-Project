@@ -6,45 +6,15 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
-import instance from "../../../api/axios";
-import { ToastContainer, toast } from "react-toastify";
-
+import { ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { signin } from "../../../redux/features/authSlice"; 
 export default function SignIn() {
-  const navigate = useNavigate();
-  const handleSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
+  const dispatch = useDispatch()
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    const userData: Record<string, unknown> = {};
-    data.forEach((value, key) => {
-      userData[key] = value;
-    });
-
-    instance
-      .post("/user/login", userData)
-      .then((response) => {
-        if (response.status === 200 && response.data.status) {
-          toast.success("Welcome :)");
-          localStorage.setItem("Token", response.data.token);
-          localStorage.setItem("username", response.data.username);
-          localStorage.setItem("userid", response.data.id);
-          setTimeout(() => {
-            navigate("/home");
-          }, 2000);
-        } else {
-          toast.error(
-            "Your account has been blocked by admins, so you can't join us :("
-          );
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 401) {
-          toast.error("Something went wrong!");
-        } else {
-          console.error("Unexpected error:", error);
-        }
-      });
+    dispatch(signin(data));
   };
 
   return (

@@ -6,42 +6,19 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import instance from '../../../api/axios.js'
-
+import { AppDispatch } from "../../../redux/store";
+import { useDispatch } from 'react-redux'
+import { signup } from "../../../redux/features/authSlice";
 export default function SignUp() {
-  const navigate = useNavigate();
-  const handleSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    const userData: Record<string, unknown> = {};
-    data.forEach((value, key) => {
-      userData[key] = value;
-    });
-
-    instance
-      .post("/user/signup", userData)
-      .then((response: { status: number; }) => {
-        console.log(response);
-        if (response.status === 201) {
-          toast.success("Successfully registered :)");
-          setTimeout(() => {
-            navigate("/signIn");
-          }, 2500);
-        }
-      })
-      .catch((error: { response: { status: number; }; }) => {
-        if (error.response && error.response.status === 422) {
-          toast.error("Email or Name is exist!");
-        } else {
-          console.error("Unexpected error:", error);
-        }
-      });
+    dispatch(signup(data));
   };
-
+  
   return (
     <Container component="main" maxWidth="xs">
       <Box

@@ -8,7 +8,6 @@ const index:React.FC = () => {
     <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/:authName" element={<Auth />} />
-        {/* <Route path="/home" element={<Home/>}/> */}
     </Routes>
   )
 }

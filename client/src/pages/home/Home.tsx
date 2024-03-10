@@ -4,9 +4,12 @@ import Nav from "../../components/nav/Nav"
 import { Container } from "../../utils/Utils"
 import './Home.scss'
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const Home:React.FC = () => {
   const [items,setItems] = useState([])
+  const state = useSelector(state => state)
+  console.log(state)
   useEffect(() => {
     instance.get('/item')
     .then(response => setItems(response.data))
@@ -29,7 +32,9 @@ const Home:React.FC = () => {
                 })
               }
           </div>
-          <div className=""></div>
+          <div className="largest-collections-wrapper">
+              
+          </div>
         </div>
       </Container>
     </>

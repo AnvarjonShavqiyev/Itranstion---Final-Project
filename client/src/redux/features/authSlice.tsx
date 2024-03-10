@@ -51,7 +51,6 @@ const signin = createAsyncThunk<SignUpResponse, User>(
       if (response.status === 200) {
         toast.success("Welcome :)");
       }
-
       return response.data as SignUpResponse;
     } catch (error: any) {
       if (error.response && error.response.status === 500) {
@@ -85,7 +84,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signin.fulfilled, (state, action) => {
-      if (action.payload?.token) {
+      if (action.payload?.user) {
         sessionStorage.setItem("token", action.payload.token);
         state.user = action.payload.user;
       }

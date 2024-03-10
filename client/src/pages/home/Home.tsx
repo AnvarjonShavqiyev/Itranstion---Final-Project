@@ -5,6 +5,7 @@ import { Container } from "../../utils/Utils"
 import './Home.scss'
 import { Link } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
+import { getCollections } from "../../redux/features/collectionSlice"
 const Home:React.FC = () => {
   const [items,setItems] = useState([])
   const {t} = useTranslation()
@@ -12,6 +13,9 @@ const Home:React.FC = () => {
     instance.get('/item')
     .then(response => setItems(response.data))
     .catch(error => console.log(error))
+  },[])
+  useEffect(()=>{
+    getCollections()
   },[])
   return (
     items && <>
@@ -30,6 +34,7 @@ const Home:React.FC = () => {
           </div>
           <div className="largest-collections-wrapper">
             <h3 className="collection-title">{t('collection-title')}</h3>
+            
           </div>
         </div>
       </Container>

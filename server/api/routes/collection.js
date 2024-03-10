@@ -20,7 +20,9 @@ const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
     const result = await Collection.find().populate("items").exec();
-    res.status(200).json(result);
+    res.status(200).json({
+      collections: result
+    });
   } catch (error) {
     res.status(500).json({
       error: error,

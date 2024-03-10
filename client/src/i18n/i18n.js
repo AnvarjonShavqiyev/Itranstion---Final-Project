@@ -9,7 +9,7 @@ i18n.use(initReactI18next).init({
         "nav-language": "Language",
         "nav-search-ps": "Search...",
         "search-tags": "Search with #tags",
-        "collection-title": "Top 5 collections",
+        "collection-title": "Top 5 largest collections",
       },
     },
     ru: {
@@ -18,7 +18,7 @@ i18n.use(initReactI18next).init({
         "nav-language": "Язык",
         "nav-search-ps": "Поиск...",
         "search-tags": "Поиск по #тегам",
-        "collection-title": "Топ 5 коллекций",
+        "collection-title": "Топ 5 больших коллекций",
       },
     },
     uz: {
@@ -27,7 +27,7 @@ i18n.use(initReactI18next).init({
         "nav-language": "Til",
         "nav-search-ps": "Izlash...",
         "search-tags": "#taglar bilan izlang",
-        "collection-title": "Top 5 to'plamlar",
+        "collection-title": "Top 5 katta to'plamlar",
       },
     },
   },

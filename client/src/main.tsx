@@ -4,6 +4,8 @@ import './index.scss'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import {store} from './redux/store/index.tsx'
+import './i18n/i18n'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Provider store={store}>

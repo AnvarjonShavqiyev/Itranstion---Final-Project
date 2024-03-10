@@ -12,7 +12,6 @@ interface SignUpResponse {
 
 interface AuthState {
   token: string;
-  _id: number | null;
   user: User | null;
 }
 
@@ -21,7 +20,6 @@ const signup = createAsyncThunk<SignUpResponse, User>(
   async (data) => {
     try {
       const response: AxiosResponse = await instance.post("/user/signup", data);
-
       if (response.status === 201) {
         toast.success("Successfully registered :)");
         setTimeout(() => {
@@ -34,7 +32,6 @@ const signup = createAsyncThunk<SignUpResponse, User>(
       if (error.response && error.response.status === 422) {
         toast.error("Email or Name is already in use!");
       } else {
-        console.error("Unexpected error:", error);
         toast.error("Something went wrong!");
       }
       throw error;
@@ -47,7 +44,6 @@ const signin = createAsyncThunk<SignUpResponse, User>(
   async (data) => {
     try {
       const response: AxiosResponse = await instance.post("/user/login", data);
-
       if (response.status === 200) {
         toast.success("Welcome :)");
       }
@@ -56,7 +52,6 @@ const signin = createAsyncThunk<SignUpResponse, User>(
       if (error.response && error.response.status === 500) {
         toast.error("Something went wrong!");
       } else {
-        console.error("Unexpected error:", error);
         toast.error("Something went wrong!");
       }
       throw error;
@@ -65,9 +60,8 @@ const signin = createAsyncThunk<SignUpResponse, User>(
 );
 
 const initialState: AuthState = {
-  token: sessionStorage.getItem("token") || "",
-  _id: null,
-  user: null,
+  token: localStorage.getItem("token") || "",
+  user: JSON.parse(localStorage.getItem("user") ?? "null") as User | null,
 };
 
 const authSlice = createSlice({
@@ -75,18 +69,20 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logOut: (state) => {
-      state._id = null;
       state.user = null;
       state.token = "";
-      sessionStorage.removeItem("token");
+      localStorage.removeItem("token");
       window.location.href = `${window.location.origin}/signIn`;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(signin.fulfilled, (state, action) => {
+      console.log(action)
       if (action.payload?.user) {
-        sessionStorage.setItem("token", action.payload.token);
+        localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
         state.user = action.payload.user;
+        window.location.href = `${window.location.origin}/`;
       }
     });
   },

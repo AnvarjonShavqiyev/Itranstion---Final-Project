@@ -3,11 +3,8 @@ import "./Auth.scss";
 import SignIn from "./signin/Signin";
 import SignUp from "./signup/Signup";
 import React from "react";
-import { useSelector } from "react-redux";
 const Auth:React.FC = () => {
   const { authName } = useParams();
-  const state = useSelector(state => state)
-  console.log(state)
   return (
     <div className="auth-wrapper">
       <div className="auth-form-wrapper">

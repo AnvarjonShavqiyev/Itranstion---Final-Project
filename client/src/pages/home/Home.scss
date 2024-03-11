@@ -27,3 +27,16 @@
   margin: 40px 0;
   font-size: 30px;
 }
+.largest-collections-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.collection-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

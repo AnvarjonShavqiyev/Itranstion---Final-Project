@@ -77,7 +77,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signin.fulfilled, (state, action) => {
-      console.log(action)
       if (action.payload?.user) {
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("user", JSON.stringify(action.payload.user));

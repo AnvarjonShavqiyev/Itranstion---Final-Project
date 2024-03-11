@@ -6,17 +6,23 @@ import './Home.scss'
 import { Link } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
 import { getCollections } from "../../redux/features/collectionSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../redux/store"
+import { Items,Collection } from '../../types/ElementTypes'
 const Home:React.FC = () => {
-  const [items,setItems] = useState([])
+  const [items, setItems] = useState<Items>({ tags: [], result: [] });
   const {t} = useTranslation()
+  const dispatch = useDispatch<AppDispatch>()
+  const collections: Collection[] = useSelector((state: RootState) => state.collections.collections);  
   useEffect(() => {
     instance.get('/item')
     .then(response => setItems(response.data))
     .catch(error => console.log(error))
   },[])
   useEffect(()=>{
-    getCollections()
-  },[])
+    dispatch(getCollections())
+  },[dispatch])
+  console.log(collections)
   return (
     items && <>
       <Nav/>
@@ -32,9 +38,19 @@ const Home:React.FC = () => {
               })
               }
           </div>
+          <h3 className="collection-title">{t('collection-title')}</h3>
           <div className="largest-collections-wrapper">
-            <h3 className="collection-title">{t('collection-title')}</h3>
-            
+              {
+                collections && collections.map((collection:Collection) => {
+                  return <div className="collection-wrapper" key={collection._id}>
+                      <img width={400} src={collection.image} alt="" />
+                      <div className="collection-info">
+                        <p>{collection.name}</p>
+                        <p>{collection.items.length} items</p>
+                      </div>
+                  </div>
+                })
+              }
           </div>
         </div>
       </Container>

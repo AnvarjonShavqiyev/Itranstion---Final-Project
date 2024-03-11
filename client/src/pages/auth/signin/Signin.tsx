@@ -7,13 +7,15 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { ToastContainer } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signin } from "../../../redux/features/authSlice"; 
+import { AppDispatch } from "../../../redux/store";
+import { User } from "../../../types/ElementTypes";
 export default function SignIn() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const data:User = new FormData(event.currentTarget);
     dispatch(signin(data));
   };
 

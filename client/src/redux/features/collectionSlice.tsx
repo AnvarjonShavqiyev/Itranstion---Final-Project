@@ -1,44 +1,38 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+/* eslint-disable react-refresh/only-export-components */
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
 
-
 interface CollectionsState {
-    collections: object;
+  collections: object | null;
 }
 
+
 const initialState: CollectionsState = {
-    collections: JSON.parse(localStorage.getItem("collections") ?? "null"),
+  collections: JSON.parse(localStorage.getItem("collections") ?? "null"),
 };
 
-const getCollections = createAsyncThunk<CollectionsState>('/collection', async () => {
-    try {
-        const response: AxiosResponse = await instance('/collection');
-        console.log(response);
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        throw error; // Re-throw the error to let it propagate and handle it in components if needed
-    }
+const getCollections = createAsyncThunk<object>("/collection", async () => {
+  try {
+    const response: AxiosResponse = await instance('/collection');
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching collections:", error);
+    throw error;
+  }
 });
 
 const CollectionSlice = createSlice({
-    name: "collection",
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder.addCase(getCollections.fulfilled, (state, action) => {
-            console.log(action);
-            if (action.payload?.collections) {
-                localStorage.setItem("collections", JSON.stringify(action.payload.collections));
-                state.collections = action.payload.collections; // Update 'collections' instead of 'user'
-                // Note: Avoid redirecting in reducers; handle redirection in components or use middleware
-            }
-        });
-    },
+  name: "collection",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+      builder.addCase(getCollections.fulfilled, (state, action: PayloadAction<object>) => {
+        state.collections = action.payload;
+        localStorage.setItem("collections", JSON.stringify(action.payload));
+    });
+  },
 });
 
-// export const { /* your actions */ } = CollectionSlice.actions;
 export { getCollections };
 export default CollectionSlice.reducer;

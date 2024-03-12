@@ -15,3 +15,15 @@ export type Collection = {
     image:string,
     items:object[]
 }
+type Comment = {
+    userId: string;
+    text: string;
+};
+export type Item = {
+    _id: string,
+    image: string,
+    tags: string,
+    name: string,
+    like: number,
+    comments: Comment[]
+}

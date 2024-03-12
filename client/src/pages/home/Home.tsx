@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import instance from "../../api/axios"
+import { useEffect } from "react"
 import Nav from "../../components/nav/Nav"
 import { Container } from "../../utils/Utils"
 import './Home.scss'
@@ -8,21 +7,19 @@ import { useTranslation } from 'react-i18next'
 import { getCollections } from "../../redux/features/collectionSlice"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
-import { Items,Collection } from '../../types/ElementTypes'
+import { Collection, Item, Items } from '../../types/ElementTypes'
+import { getItems } from "../../redux/features/itemSlice"
+import Footer from "../../components/footer/Footer"
 const Home:React.FC = () => {
-  const [items, setItems] = useState<Items>({ tags: [], result: [] });
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
-  const collections: Collection[] = useSelector((state: RootState) => state.collections.collections);  
-  useEffect(() => {
-    instance.get('/item')
-    .then(response => setItems(response.data))
-    .catch(error => console.log(error))
-  },[])
+  const collections = useSelector((state: RootState) => state.collections.collections) as Collection[];  
+  const items = useSelector((state: RootState) => state.items.items) as Items;   
   useEffect(()=>{
     dispatch(getCollections())
+    dispatch(getItems())
   },[dispatch])
-  console.log(collections)
+  console.log(items)
   return (
     items && <>
       <Nav/>
@@ -41,19 +38,35 @@ const Home:React.FC = () => {
           <h3 className="collection-title">{t('collection-title')}</h3>
           <div className="largest-collections-wrapper">
               {
-                collections && collections.map((collection:Collection) => {
+                collections && collections.slice(0,5).map((collection:Collection) => {
                   return <div className="collection-wrapper" key={collection._id}>
                       <img width={400} src={collection.image} alt="" />
                       <div className="collection-info">
                         <p>{collection.name}</p>
-                        <p>{collection.items.length} items</p>
+                        <p>{collection.items.length}{collection.items.length > 1 ? ' ' + t('items') : ' ' + t('item')}</p>
                       </div>
                   </div>
                 })
               }
           </div>
+          <h3 className="collection-title">{t('item-title')}</h3>
+          <div className="latest-items-wrapper">
+              {
+                items.result.slice(0,5).map((item:Item) => {
+                  return <div className="collection-wrapper" key={item._id}>
+                  <img width={400} src={item.image} alt="" />
+                  <div className="collection-info">
+                    <p>{item.name}</p>
+                    <p>{item.comments.length} {item.comments.length > 1 ? ' ' + t('comments') : ' ' + t('comment')}</p>
+                  </div>
+                  <p>0{item.like} {item.like > 1 ? ' ' + t('likes') : ' ' + t('like')}</p>
+              </div>
+                })
+              }
+          </div>
         </div>
       </Container>
+      <Footer/>
     </>
   )
 }

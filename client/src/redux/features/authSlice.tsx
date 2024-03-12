@@ -17,7 +17,7 @@ interface AuthState {
 
 const signup = createAsyncThunk<SignUpResponse, User>(
   "/auth/signup",
-  async (data) => {
+  async (data:User) => {
     try {
       const response: AxiosResponse = await instance.post("/user/signup", data);
       if (response.status === 201) {
@@ -41,7 +41,7 @@ const signup = createAsyncThunk<SignUpResponse, User>(
 
 const signin = createAsyncThunk<SignUpResponse, User>(
   "/auth/login",
-  async (data) => {
+  async (data:User) => {
     try {
       const response: AxiosResponse = await instance.post("/user/login", data);
       if (response.status === 200) {

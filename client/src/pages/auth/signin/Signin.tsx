@@ -13,12 +13,16 @@ import { AppDispatch } from "../../../redux/store";
 import { User } from "../../../types/ElementTypes";
 export default function SignIn() {
   const dispatch = useDispatch<AppDispatch>()
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data:User = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      username: formData.get('username') as string,
+      password: formData.get('password') as string,
+    } as User;
     dispatch(signin(data));
   };
-
+  
   return (
     <Container component="main" maxWidth="xs">
       <Box

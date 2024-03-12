@@ -11,11 +11,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { AppDispatch } from "../../../redux/store";
 import { useDispatch } from 'react-redux'
 import { signup } from "../../../redux/features/authSlice";
+import { User } from "../../../types/ElementTypes";
 export default function SignUp() {
   const dispatch = useDispatch<AppDispatch>();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      username: formData.get('username') as string,
+      password: formData.get('password') as string,
+      email: formData.get('email') as string,
+    } as User;
     dispatch(signup(data));
   };
   

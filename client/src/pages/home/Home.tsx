@@ -52,15 +52,21 @@ const Home:React.FC = () => {
           <h3 className="collection-title">{t('item-title')}</h3>
           <div className="latest-items-wrapper">
               {
-                items.result.slice(0,5).map((item:Item) => {
-                  return <div className="collection-wrapper" key={item._id}>
-                  <img width={400} src={item.image} alt="" />
-                  <div className="collection-info">
-                    <p>{item.name}</p>
-                    <p>{item.comments.length} {item.comments.length > 1 ? ' ' + t('comments') : ' ' + t('comment')}</p>
-                  </div>
-                  <p>0{item.like} {item.like > 1 ? ' ' + t('likes') : ' ' + t('like')}</p>
-              </div>
+                (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
+                  return (
+                    <div className="collection-wrapper" key={item._id}>
+                      <img width={400} src={item.image} alt="" />
+                      <div className="collection-info">
+                        <p>{item.name}</p>
+                        <p>
+                          {item.comments.length} {item.comments.length > 1 ? ' ' + t('comments') : ' ' + t('comment')}
+                        </p>
+                      </div>
+                      <p>
+                        0{item.like} {item.like > 1 ? ' ' + t('likes') : ' ' + t('like')}
+                      </p>
+                    </div>
+                  );
                 })
               }
           </div>

@@ -15,13 +15,16 @@ export default function SignIn() {
   const dispatch = useDispatch<AppDispatch>()
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget) as FormData;
+    const formData = new FormData(event.currentTarget);
+  
     const data = {
-      username: formData.get('username') as string,
-      password: formData.get('password') as string,
+      username: formData.get('username')?.toString() || '',
+      password: formData.get('password')?.toString() || '',
     } as User;
+  
     dispatch(signin(data));
   };
+  
   
   return (
     <Container component="main" maxWidth="xs">

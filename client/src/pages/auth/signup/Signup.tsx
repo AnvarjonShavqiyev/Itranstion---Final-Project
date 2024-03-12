@@ -16,7 +16,7 @@ export default function SignUp() {
   const dispatch = useDispatch<AppDispatch>();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget) as FormData;
     const data = {
       username: formData.get('username') as string,
       password: formData.get('password') as string,

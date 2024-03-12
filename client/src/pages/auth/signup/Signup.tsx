@@ -17,15 +17,14 @@ export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    console.log(event.currentTarget,11)
     const data: User = {
-      username: formData.get('username')?.toString() || '',
+      username: formData.get('name')?.toString() || '',
       email: formData.get('email')?.toString() || '', 
       password: formData.get('password')?.toString() || '',
     };
     dispatch(signup(data));
   };
-  
-  
   return (
     <Container component="main" maxWidth="xs">
       <Box

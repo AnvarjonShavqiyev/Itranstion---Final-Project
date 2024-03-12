@@ -18,7 +18,7 @@ export default function SignIn() {
     const formData = new FormData(event.currentTarget);
   
     const data = {
-      username: formData.get('username')?.toString() || '',
+      username: formData.get('name')?.toString() || '',
       password: formData.get('password')?.toString() || '',
     } as User;
   

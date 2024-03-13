@@ -17,6 +17,8 @@ const Home:React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
   const collections = useSelector((state: RootState) => state.collections.collections) as Collection[];  
   const items = useSelector((state: RootState) => state.items.items) as Items;   
+  const searchResult = useSelector((state: RootState) => state.search.result)
+  console.log(searchResult)
   useEffect(()=>{
     dispatch(getCollections())
     dispatch(getItems())
@@ -54,7 +56,7 @@ const Home:React.FC = () => {
           <div className="latest-items-wrapper">
               {
                 (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
-                  return <ItemC item={item}/>
+                  return <ItemC key={item._id} item={item}/>
                 })
               }
           </div>

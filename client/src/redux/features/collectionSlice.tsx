@@ -7,7 +7,6 @@ interface CollectionsState {
   collections: object | null;
 }
 
-
 const initialState: CollectionsState = {
   collections: JSON.parse(localStorage.getItem("collections") ?? "null"),
 };

@@ -5,6 +5,7 @@ const multer = require("multer");
 const cloudinary = require("../helpers/cloudinary");
 
 const Collection = require("../modules/collection");
+const User = require("../modules/user");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -48,6 +49,7 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
   const image = req.file;
   const { path } = image;
   const newPath = await uploader(path);
+  const user = user()
   const collection = new Collection({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -57,6 +59,9 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
   });
   try {
     const result = await collection.save();
+    const user = User.findById(req.body.user_id)
+    user.collections.push(result._id)
+    await user.save()
     res.status(200).json({
       message: "Successfully",
       collection: result,

@@ -20,28 +20,26 @@ function getTime() {
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await User.find().exec();
+    const result = await User.find()
+      .populate({
+        path: "collections",
+        populate: { path: "items", populate: "comments" },
+      })
+      .exec();
     res.status(200).json(result);
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: error,
     });
   }
 });
-
-router.get("/:userId", async (req, res, next) => {
-  const id = req.params.userId;
-  try {
-    const doc = await User.findById(id).exec();
-    res.status(200).json(doc);
-  } catch (err) {
-    res.status(500).json({ error: err });
-  }
-});
-
 router.post("/login", (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .exec()
+  User.findOne({ email: req.body.email }).populate({
+      path: "collections",
+      populate: { path: "items", populate: "comments" },
+    })
+  .exec()
     .then((user) => {
       if (!user) {
         return res.status(401).json({
@@ -67,10 +65,10 @@ router.post("/login", (req, res, next) => {
             expiresIn: "2h",
           }
         );
-       return res.status(200).json({
+        return res.status(200).json({
           message: "Auth successful",
           user: user,
-          token: token
+          token: token,
         });
       });
     })
@@ -80,7 +78,6 @@ router.post("/login", (req, res, next) => {
       });
     });
 });
-
 router.post("/signup", async (req, res, next) => {
   try {
     const existingUserEmail = await User.findOne({
@@ -117,7 +114,6 @@ router.post("/signup", async (req, res, next) => {
     });
   }
 });
-
 router.post("/add-admin", async (req, res, next) => {
   try {
     console.log(req.body);
@@ -137,7 +133,7 @@ router.post("/add-admin", async (req, res, next) => {
       {
         role: "admin",
         promotedBy: req.body.promotedBy,
-        removedBy: "none"
+        removedBy: "none",
       }
     );
     const result = await User.findOne({ name: req.body.username });
@@ -168,7 +164,7 @@ router.post("/rm-admin", async (req, res, next) => {
       {
         role: "user",
         removedBy: req.body.removedBy,
-        promotedBy: "none"
+        promotedBy: "none",
       }
     );
     const result = await User.findOne({ name: req.body.username });
@@ -200,7 +196,6 @@ router.patch("/update", async (req, res, next) => {
     });
   }
 });
-
 router.delete("/delete", async (req, res, next) => {
   try {
     const userIds = req.body.userIds;
@@ -219,5 +214,16 @@ router.delete("/delete", async (req, res, next) => {
     });
   }
 });
-
+router.get("/:userId", async (req, res, next) => {
+  const id = req.params.userId;
+  try {
+    const doc = await User.findById(id).populate({
+      path: "collections",
+      populate: { path: "items", populate: "comments" },
+    }).exec();
+    res.status(200).json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+});
 module.exports = router;

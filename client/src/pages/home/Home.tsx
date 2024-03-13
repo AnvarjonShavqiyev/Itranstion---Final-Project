@@ -19,7 +19,6 @@ const Home:React.FC = () => {
     dispatch(getCollections())
     dispatch(getItems())
   },[dispatch])
-  console.log(items)
   return (
     items && <>
       <Nav/>
@@ -35,7 +34,10 @@ const Home:React.FC = () => {
               })
               }
           </div>
-          <h3 className="collection-title">{t('collection-title')}</h3>
+          <div className="section-title">
+            <h3 className="collection-title">{t('collection-title')}</h3>
+            <Link to='/'>See all collections</Link>
+          </div>
           <div className="largest-collections-wrapper">
               {
                 collections && collections.slice(0,5).map((collection:Collection) => {
@@ -49,7 +51,10 @@ const Home:React.FC = () => {
                 })
               }
           </div>
-          <h3 className="collection-title">{t('item-title')}</h3>
+          <div className="section-title">
+            <h3 className="collection-title">{t('item-title')}</h3>
+            <Link to='/'>See all items</Link>
+          </div>
           <div className="latest-items-wrapper">
               {
                 (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {

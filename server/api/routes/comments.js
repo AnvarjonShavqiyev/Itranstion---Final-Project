@@ -19,26 +19,27 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/add-com", async (req, res, next) => {
-  console.log(req.body);
   try {
     if (!req.body.name || !req.body.text || !req.body.item_id) {
       return res.status(404).json({
         error: "Username, Text or item_id not given",
       });
     }
+    const item = await Items.findById(req.body.item_id);
+    if (!item) {
+      return res.status(404).json({
+        message: "Item not found"
+      })
+    }
     const comment = new Comments({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       text: req.body.text,
+      item_id: req.body.item_id
     });
 
     const result = await comment.save();
-
-    const item = await Items.findById(req.body.item_id);
-    if (!item) {
-      throw Error("Item not found");
-    }
-    item.comments.push(comment.id);
+    item.comments.push(comment._id);
     await item.save();
 
     res.status(200).json({
@@ -51,25 +52,24 @@ router.post("/add-com", async (req, res, next) => {
     });
   }
 });
-
 router.patch("/:id", async (req, res, next) => {
-  try{
-    const id = req.params.id
+  try {
+    const id = req.params.id;
     const updates = {
-      text: req.body.text
-    }
-    const options = {new: true}
-    const result = await Comments.findByIdAndUpdate(id, updates, options)
+      text: req.body.text,
+    };
+    const options = { new: true };
+    const result = await Comments.findByIdAndUpdate(id, updates, options);
     return res.status(200).json({
       result: result,
-      message: 'Comment updated.'
-    })
-  }catch(error){
+      message: "Comment updated.",
+    });
+  } catch (error) {
     return res.status(500).json({
-      error: error.message
-    })
+      error: error.message,
+    });
   }
-})
+});
 router.delete("/:id", async (req, res, next) => {
   try {
     comments

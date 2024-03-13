@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: { type: String, required: true, unique: true  },
-  email: { type: String, required: true, unique:true },
+  name: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   lstLogTime: { type: String },
   regTime: { type: String },
@@ -14,8 +14,12 @@ const userSchema = mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
-  promotedBy: {type: String, default: "None"},
-  removedBy: {type: String, default: "None"}
+  promotedBy: { type: String, default: "None" },
+  removedBy: { type: String, default: "None" },
+  collections: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "collection",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

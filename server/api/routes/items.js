@@ -35,7 +35,7 @@ router.get("/", async (req, res, next) => {
     result.forEach((element) => {
       element.tags.split("#").forEach((tag) => {
         !tags.includes(tag) && tag.length > 0 && tags.push(tag);
-      });
+      })
     });
     res.status(200).json({
       result: result,

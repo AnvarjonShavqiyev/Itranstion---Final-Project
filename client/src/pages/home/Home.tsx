@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from "../../redux/store"
 import { Collection, Item, Items } from '../../types/ElementTypes'
 import { getItems } from "../../redux/features/itemSlice"
 import Footer from "../../components/footer/Footer"
+import CollectionC from "../../components/collection/Collection"
 const Home:React.FC = () => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
@@ -41,13 +42,7 @@ const Home:React.FC = () => {
           <div className="largest-collections-wrapper">
               {
                 collections && collections.slice(0,5).map((collection:Collection) => {
-                  return <div className="collection-wrapper" key={collection._id}>
-                      <img width={400} src={collection.image} alt="" />
-                      <div className="collection-info">
-                        <p>{collection.name}</p>
-                        <p>{collection.items.length}{collection.items.length > 1 ? ' ' + t('items') : ' ' + t('item')}</p>
-                      </div>
-                  </div>
+                  return <CollectionC key={collection._id} collection={collection}/>
                 })
               }
           </div>

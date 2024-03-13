@@ -15,7 +15,7 @@ const initialState: CollectionsState = {
 const getCollections = createAsyncThunk<object>("/collection", async () => {
   try {
     const response: AxiosResponse = await instance('/collection');
-    return response.data;
+    return response.data.collections;
   } catch (error) {
     console.error("Error fetching collections:", error);
     throw error;

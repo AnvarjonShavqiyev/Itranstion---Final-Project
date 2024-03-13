@@ -16,11 +16,21 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-
+function getTime() {
+  const currentDateAndTime = new Date();
+  const year = currentDateAndTime.getFullYear();
+  const month = currentDateAndTime.getMonth() + 1;
+  const day = currentDateAndTime.getDate();
+  const hours = currentDateAndTime.getHours();
+  const minutes = currentDateAndTime.getMinutes();
+  const seconds = currentDateAndTime.getSeconds();
+  const formattedDateAndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return formattedDateAndTime;
+}
 const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Items.find().populate("comments").exec();
+    const result = await Items.find().sort({date:-1}).populate("comments").exec();
     const tags = [];
     result.forEach((element) => {
       element.tags.split("#").forEach((tag) => {
@@ -37,7 +47,6 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
-
 router.get("/search", async (req, res, next) => {
   try {
     const { key } = req.query;
@@ -93,7 +102,6 @@ router.get("/:id", async (req, res, next) => {
     });
   }
 });
-
 router.post("/add-item", upload.single("image"), async (req, res, next) => {
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;
@@ -105,6 +113,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     image: newPath,
     tags: req.body.tags,
     additionalInfo: req.body.additionalInfo,
+    date: getTime()
   });
 
   const result = await item.save();

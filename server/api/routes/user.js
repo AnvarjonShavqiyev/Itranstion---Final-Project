@@ -17,7 +17,6 @@ function getTime() {
   const formattedDateAndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   return formattedDateAndTime;
 }
-
 router.get("/", async (req, res, next) => {
   try {
     const result = await User.find()

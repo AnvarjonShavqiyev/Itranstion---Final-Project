@@ -12,7 +12,8 @@ const itemSchema = mongoose.Schema({
       ref: "comments",
     },
   likes: {type: Number},
-  additionalInfo: {type: Array}
+  additionalInfo: {type: Array},
+  date:{type:String}
 });
 
 module.exports = mongoose.model("items", itemSchema);

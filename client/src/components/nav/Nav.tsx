@@ -12,9 +12,10 @@ const Nav = () => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
   const [search, setSearch] = useState<string>('')
-  useEffect(() => {  
+  useEffect(() => {   
     dispatch(searchByKey(search))
   },[search])
+
   return (
     <Container>
         <div className='navbar-wrapper'>

@@ -31,6 +31,3 @@ export type KeySearchResult = {
     collections: Collection[]
     comments: Comment[]
 }
-export type TagSearchResult = {
-    
-}

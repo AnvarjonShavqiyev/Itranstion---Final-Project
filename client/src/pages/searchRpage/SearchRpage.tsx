@@ -15,7 +15,7 @@ const SearchRpage: React.FC = () => {
   const keyResult = useSelector((state: RootState) => state.search.keyResult);
   const dispatch = useDispatch<AppDispatch>();
   const { tag } = useParams<{ tag?: string }>();
-
+  console.log(tagResult)
   useEffect(() => {
     if (tag) {
       dispatch(searchByTag(tag));

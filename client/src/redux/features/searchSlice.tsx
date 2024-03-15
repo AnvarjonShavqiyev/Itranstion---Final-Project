@@ -2,11 +2,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
-import { KeySearchResult } from "../../types/ElementTypes";
+import { Item, KeySearchResult } from "../../types/ElementTypes";
 
 interface ResultState {
   keyResult: KeySearchResult | null;
-  tagResult: any[] | null; // Adjusted type for tagResult
+  tagResult: Item[] | null; 
 }
 
 const initialState: ResultState = {
@@ -14,7 +14,7 @@ const initialState: ResultState = {
   keyResult: null
 };
 
-// Adjusted types for createAsyncThunk
+
 const searchByKey = createAsyncThunk<KeySearchResult, string>(
   "searchByKey",
   async (key: string) => {

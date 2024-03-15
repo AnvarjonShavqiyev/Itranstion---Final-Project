@@ -27,3 +27,10 @@ export type Item = {
     like: number,
     comments: Comment[]
 }
+export type KeySearchResult = {
+    collections: Collection[]
+    comments: Comment[]
+}
+export type TagSearchResult = {
+    
+}

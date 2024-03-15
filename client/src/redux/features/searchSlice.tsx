@@ -2,47 +2,58 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
+import { KeySearchResult } from "../../types/ElementTypes";
 
 interface ResultState {
-  result: object | null;
+  keyResult: KeySearchResult | null;
+  tagResult: any[] | null; // Adjusted type for tagResult
 }
 
 const initialState: ResultState = {
-  result: null
+  tagResult: null,
+  keyResult: null
 };
 
-const searchByKey = createAsyncThunk<object,string>("/search", async (key:string) => {
-  try {
-    const response: AxiosResponse = await instance(`item/search/?key=${key}`);
-    return response.data.result;
-  } catch (error) {
-    console.error("Error fetching collections:", error);
-    throw error;
+// Adjusted types for createAsyncThunk
+const searchByKey = createAsyncThunk<KeySearchResult, string>(
+  "searchByKey",
+  async (key: string) => {
+    try {
+      const response: AxiosResponse = await instance.get(`item/search/?key=${key}`);
+      return response.data.result;
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      throw error;
+    }
   }
-});
-const searchByTag = createAsyncThunk<object,string>("/search", async (key:string) => {
-  try {
-    const response: AxiosResponse = await instance(`item/search/?tag=${key}`);
-    return response.data.result;
-  } catch (error) {
-    console.error("Error fetching collections:", error);
-    throw error;
+);
+
+const searchByTag = createAsyncThunk<any[], string>(
+  "searchByTag",
+  async (tag: string) => {
+    try {
+      const response: AxiosResponse = await instance.get(`item/search/?tag=${tag}`);
+      return response.data.result.items;
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      throw error;
+    }
   }
-});
+);
 
 const searchSlice = createSlice({
   name: "collection",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-      builder.addCase(searchByKey.fulfilled, (state, action: PayloadAction<object>) => {
-        state.result = action.payload;
-      });
-      builder.addCase(searchByTag.fulfilled, (state, action: PayloadAction<object>) => {
-        state.result = action.payload;
-      });
+    builder.addCase(searchByKey.fulfilled, (state, action: PayloadAction<KeySearchResult>) => {
+      state.keyResult = action.payload;
+    });
+    builder.addCase(searchByTag.fulfilled, (state, action: PayloadAction<any[]>) => { // Adjusted PayloadAction type
+      state.tagResult = action.payload;
+    });
   },
 });
 
-export { searchByKey,searchByTag };
+export { searchByKey, searchByTag };
 export default searchSlice.reducer;

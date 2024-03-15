@@ -12,8 +12,8 @@ const Nav = () => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
   const [search, setSearch] = useState<string>('')
-  useEffect(() => {
-    dispatch(searchByKey(search)) 
+  useEffect(() => {  
+    dispatch(searchByKey(search))
   },[search])
   return (
     <Container>

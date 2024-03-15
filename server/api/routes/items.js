@@ -51,6 +51,24 @@ router.get("/search", async (req, res, next) => {
   try {
     const { key } = req.query;
     const { tag } = req.query;
+    if (key) {
+      const regexKey = new RegExp(key, "i");
+      const collections = await Collection.find({
+        name: { $regex: regexKey },
+      }).exec();
+      const comments = await Comments.find({
+        text: { $regex: regexKey },
+      }).exec();
+      if (collections || comments) {
+        const result = {
+          collections,
+          comments,
+        };
+        res.status(200).json({
+          result: result,
+        });
+      } 
+    }
     if (tag) {
       const regexKey = new RegExp(tag, "i");
       const items = await Items.find({ tags: { $regex: regexKey } }).exec();
@@ -62,31 +80,6 @@ router.get("/search", async (req, res, next) => {
           result: result,
         });
       } 
-    }
-    if (key.length > 0) {
-      const regexKey = new RegExp(key, "i");
-      const collections = await Collection.find({
-        name: { $regex: regexKey },
-      }).exec();
-      const items = await Items.find({ name: { $regex: regexKey } }).exec();
-      const comments = await Comments.find({
-        text: { $regex: regexKey },
-      }).exec();
-
-      if (collections || comments || items) {
-        const result = {
-          collections,
-          comments,
-          items
-        };
-        res.status(200).json({
-          result: result,
-        });
-      } 
-    }else{
-      res.status(200).json({
-        result: null,
-      });
     }
   } catch (error) {
     console.error("Error in search:", error);

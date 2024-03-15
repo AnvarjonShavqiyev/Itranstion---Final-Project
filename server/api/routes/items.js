@@ -51,6 +51,18 @@ router.get("/search", async (req, res, next) => {
   try {
     const { key } = req.query;
     const { tag } = req.query;
+    if (tag) {
+      const regexKey = new RegExp(tag, "i");
+      const items = await Items.find({ tags: { $regex: regexKey } }).exec();
+      if (items) {
+        const result = {
+          items
+        };
+        res.status(200).json({
+          result: result,
+        });
+      } 
+    }
     if (key.length > 0) {
       const regexKey = new RegExp(key, "i");
       const collections = await Collection.find({
@@ -75,18 +87,6 @@ router.get("/search", async (req, res, next) => {
       res.status(200).json({
         result: null,
       });
-    }
-    if (tag) {
-      const regexKey = new RegExp(tag, "i");
-      const items = await Items.find({ tags: { $regex: regexKey } }).exec();
-      if (items) {
-        const result = {
-          items
-        };
-        res.status(200).json({
-          result: result,
-        });
-      } 
     }
   } catch (error) {
     console.error("Error in search:", error);

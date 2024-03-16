@@ -30,12 +30,15 @@ function getTime() {
 const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Items.find().sort({date:-1}).populate("comments").exec();
+    const result = await Items.find()
+      .sort({ date: -1 })
+      .populate("comments")
+      .exec();
     const tags = [];
     result.forEach((element) => {
       element.tags.split("#").forEach((tag) => {
         !tags.includes(tag) && tag.length > 0 && tags.push(tag);
-      })
+      });
     });
     res.status(200).json({
       result: result,
@@ -50,10 +53,10 @@ router.get("/", async (req, res, next) => {
 router.get("/searchByKey", async (req, res, next) => {
   try {
     const { key } = req.query;
-    if (key.length === 0){
+    if (key.length === 0) {
       return res.status(500).json({
-        result: null
-      })
+        result: null,
+      });
     }
     if (key) {
       const regexKey = new RegExp(key, "i");
@@ -70,24 +73,12 @@ router.get("/searchByKey", async (req, res, next) => {
         const result = {
           collections,
           comments,
-          items
+          items,
         };
         res.status(200).json({
           result: result,
         });
-      } 
-    }
-    if (tag) {
-      const regexKey = new RegExp(tag, "i");
-      const items = await Items.find({ tags: { $regex: regexKey } }).exec();
-      if (items) {
-        const result = {
-          items
-        };
-        res.status(200).json({
-          result: result,
-        });
-      } 
+      }
     }
   } catch (error) {
     console.error("Error in search:", error);
@@ -97,23 +88,23 @@ router.get("/searchByKey", async (req, res, next) => {
   }
 });
 router.get("/searchByTag", async (req, res, next) => {
-  try{
-    const { tag } = req.query
+  try {
+    const { tag } = req.query;
     const regexKey = new RegExp(tag, "i");
     const items = await Items.find({
-      tag: { $regex: regexKey },
+      tags: { $regex: regexKey },
     }).exec();
-    if(items){
+    if (items) {
       return res.status(200).json({
-        result: items
-      })
+        result: items,
+      });
     }
-  }catch(error){
+  } catch (error) {
     return res.status(500).json({
-      error: error
-    })
+      error: error,
+    });
   }
-})
+});
 router.get("/:id", async (req, res, next) => {
   try {
     Items.findById(req.params.id)
@@ -139,7 +130,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     image: newPath,
     tags: req.body.tags,
     additionalInfo: req.body.additionalInfo,
-    date: getTime()
+    date: getTime(),
   });
 
   const result = await item.save();

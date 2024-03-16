@@ -96,7 +96,7 @@ router.get("/searchByKey", async (req, res, next) => {
     });
   }
 });
-router.gey("/searchByTag", async (req, res, next) => {
+router.get("/searchByTag", async (req, res, next) => {
   try{
     const { tag } = req.query
     const regexKey = new RegExp(tag, "i");

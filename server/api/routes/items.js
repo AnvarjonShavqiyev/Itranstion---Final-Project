@@ -47,10 +47,14 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
-router.get("/search", async (req, res, next) => {
+router.get("/searchByKey", async (req, res, next) => {
   try {
     const { key } = req.query;
-    const { tag } = req.query;
+    if (key.length === 0){
+      return res.status(500).json({
+        result: null
+      })
+    }
     if (key) {
       const regexKey = new RegExp(key, "i");
       const collections = await Collection.find({
@@ -59,10 +63,14 @@ router.get("/search", async (req, res, next) => {
       const comments = await Comments.find({
         text: { $regex: regexKey },
       }).exec();
-      if (collections || comments) {
+      const items = await Items.find({
+        name: { $regex: regexKey },
+      }).exec();
+      if (collections || comments || items) {
         const result = {
           collections,
           comments,
+          items
         };
         res.status(200).json({
           result: result,
@@ -88,6 +96,24 @@ router.get("/search", async (req, res, next) => {
     });
   }
 });
+router.gey("/searchByTag", async (req, res, next) => {
+  try{
+    const { tag } = req.query
+    const regexKey = new RegExp(tag, "i");
+    const items = await Items.find({
+      tag: { $regex: regexKey },
+    }).exec();
+    if(items){
+      return res.status(200).json({
+        result: items
+      })
+    }
+  }catch(error){
+    return res.status(500).json({
+      error: error
+    })
+  }
+})
 router.get("/:id", async (req, res, next) => {
   try {
     Items.findById(req.params.id)

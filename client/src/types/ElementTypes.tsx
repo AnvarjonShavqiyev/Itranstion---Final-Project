@@ -15,7 +15,7 @@ export type Collection = {
     image:string,
     items:object[]
 }
-type Comment = {
+export type Comment = {
     userId: string;
     text: string;
 };

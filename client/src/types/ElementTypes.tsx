@@ -18,6 +18,7 @@ export type Collection = {
 export type Comment = {
     userId: string;
     text: string;
+    item_id: string
 };
 export type Item = {
     _id: string,
@@ -30,4 +31,5 @@ export type Item = {
 export type KeySearchResult = {
     collections: Collection[]
     comments: Comment[]
+    items: Item[]
 }

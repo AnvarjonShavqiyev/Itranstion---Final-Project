@@ -6,7 +6,6 @@ const Comments = require("../modules/comments");
 const Items = require("../modules/items");
 const comments = require("../modules/comments");
 
-const upload = multer();
 router.get("/", async (req, res, next) => {
   try {
     const result = await Comments.find().exec();

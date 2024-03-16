@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { searchByTag } from "../../redux/features/searchSlice";
 import { Container } from "../../utils/Utils";
 import "./SearchRpage.scss";
@@ -10,7 +10,13 @@ import { Collection, Comment, Item } from "../../types/ElementTypes"; // Assumin
 import Nav from "../../components/nav/Nav";
 import CollectionC from "../../components/collection/Collection";
 
-const SearchRpage: React.FC = () => {
+interface SearchRProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+const SearchRpage: React.FC<SearchRProps> = ({search,setSearch}) => {
   const tagResult = useSelector((state: RootState) => state.search.tagResult);
   const keyResult = useSelector((state: RootState) => state.search.keyResult);
   const dispatch = useDispatch<AppDispatch>();
@@ -21,10 +27,10 @@ const SearchRpage: React.FC = () => {
       dispatch(searchByTag(tag));
     }
   }, [tag, dispatch]);
-
+  console.log(keyResult)
   return (
     <Container>
-      <Nav />
+      <Nav setSearch={setSearch} search={search} />
       <p className="search-result-title">Search Results</p>
       <div className="search-result-section">
         <div className="search-section-title">Items by #tag</div>
@@ -38,30 +44,43 @@ const SearchRpage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="search-result-section">
+      {
+        search.length > 0 &&
+        <div className="search-result-section">
+        <div className="search-section-title">Items</div>
+        <div className="search-result-wrapper">
+            {keyResult && keyResult.items.length > 0 ? (
+              keyResult.items.map((el: Item) => (
+                <ItemC key={el._id} item={el} />
+              ))
+            ) : (
+              <p>No Items</p>
+            )}
+        </div>  
         <div className="search-section-title">Collections</div>
         <div className="search-result-wrapper">
-          {keyResult && keyResult.collections.length > 0 ? (
-            keyResult.collections.map((el: Collection) => (
-              <CollectionC key={el._id} collection={el} />
-            ))
-          ) : (
-            <p>No collections</p>
-          )}
+            {keyResult && keyResult.collections.length > 0 ? (
+              keyResult.collections.map((el: Collection) => (
+                <CollectionC key={el._id} collection={el} />
+              ))
+            ) : (
+              <p>No collections</p>
+            )}
         </div>  
         <div className="search-section-title">Comments</div>
         <div className="search-result-wrapper">
           {keyResult && keyResult.comments.length > 0 ? (
             keyResult.comments.map((el: Comment) => (
               <div>
-                <p>{el.text}</p>
-              </div>
+                <p>Comment "{el.text}" at this <Link className="item_link" to={`/singleItem/${el.item_id}`}>Item</Link></p>
+              </div>  
             ))
           ) : (
             <p>No comments</p>
           )}
         </div>  
       </div>
+      }
     </Container>
   );
 };

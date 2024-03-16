@@ -4,14 +4,19 @@ import './Nav.scss'
 import { Link } from 'react-router-dom';
 import LangSwitcher from '../langSwitcher/LangSwitcher';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { searchByKey } from '../../redux/features/searchSlice';
-const Nav = () => {
+
+interface navProps {
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  search:string,
+}
+
+const Nav:React.FC<navProps> = ({setSearch,search}) => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
-  const [search, setSearch] = useState<string>('')
   useEffect(() => {   
     dispatch(searchByKey(search))
   },[search])

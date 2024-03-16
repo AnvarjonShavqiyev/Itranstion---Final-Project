@@ -19,7 +19,7 @@ const searchByKey = createAsyncThunk<KeySearchResult, string>(
   "searchByKey",
   async (key: string) => {
     try {
-      const response: AxiosResponse = await instance.get(`item/searchByKey/?key=${key}`);
+      const response: AxiosResponse = await instance.get(`item/search/?key=${key}`);
       return response.data.result;
     } catch (error) {
       console.error("Error fetching collections:", error);
@@ -32,7 +32,7 @@ const searchByTag = createAsyncThunk<any[], string>(
   "searchByTag",
   async (tag: string) => {
     try {
-      const response: AxiosResponse = await instance.get(`item/searchByTag/?tag=${tag}`);
+      const response: AxiosResponse = await instance.get(`item/search/?tag=${tag}`);
       return response.data.result.items;
     } catch (error) {
       console.error("Error fetching collections:", error);

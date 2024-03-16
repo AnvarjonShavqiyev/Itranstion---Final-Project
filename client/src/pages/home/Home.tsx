@@ -12,20 +12,24 @@ import { getItems } from "../../redux/features/itemSlice"
 import Footer from "../../components/footer/Footer"
 import CollectionC from "../../components/collection/Collection"
 import ItemC from "../../components/item/Item"
-const Home:React.FC = () => {
+
+interface HomeProps {
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  search:string
+}
+
+const Home:React.FC<HomeProps> = ({setSearch,search}) => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
   const collections = useSelector((state: RootState) => state.collections.collections) as Collection[];  
   const items = useSelector((state: RootState) => state.items.items) as Items;   
-  const searchResult = useSelector((state: RootState) => state.search.result)
-  console.log(searchResult)
   useEffect(()=>{
     dispatch(getCollections())
     dispatch(getItems())
   },[dispatch])
   return (
     items && <>
-      <Nav/>
+      <Nav setSearch={setSearch} search={search}/>
       <Container>
         <div className="tag-cloud-wrapper">
           <div className="tag-header">

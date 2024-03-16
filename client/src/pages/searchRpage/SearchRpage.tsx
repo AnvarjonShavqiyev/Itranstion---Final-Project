@@ -9,19 +9,19 @@ import ItemC from "../../components/item/Item";
 import { Collection, Comment, Item } from "../../types/ElementTypes"; // Assuming correct import for Item and Collection
 import Nav from "../../components/nav/Nav";
 import CollectionC from "../../components/collection/Collection";
+import { useTranslation } from "react-i18next";
 
 interface SearchRProps {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
 const SearchRpage: React.FC<SearchRProps> = ({search,setSearch}) => {
   const tagResult = useSelector((state: RootState) => state.search.tagResult);
   const keyResult = useSelector((state: RootState) => state.search.keyResult);
   const dispatch = useDispatch<AppDispatch>();
   const { tag } = useParams<{ tag?: string }>();
-
+  const { t } = useTranslation()
   useEffect(() => {
     if (tag) {
       dispatch(searchByTag(tag));
@@ -31,55 +31,55 @@ const SearchRpage: React.FC<SearchRProps> = ({search,setSearch}) => {
   return (
     <Container>
       <Nav setSearch={setSearch} search={search} />
-      <p className="search-result-title">Search Results</p>
+      <p className="search-result-title">{t('search-results')}</p>
       <div className="search-result-section">
-        <div className="search-section-title">Items by #tag</div>
+        <div className="search-section-title">{t('items-by-tag')}</div>
         <div className="search-result-wrapper">
           {tagResult && tagResult.length > 0 ? (
             tagResult.map((el: Item) => (
               <ItemC key={el._id} item={el} />
             ))
           ) : (
-            <p>No items</p>
+            <p>{t('no-items')}</p>
           )}
         </div>
       </div>
       {
         search.length > 0 &&
         <div className="search-result-section">
-        <div className="search-section-title">Items</div>
+        <div className="search-section-title">{t('Items')}</div>
         <div className="search-result-wrapper">
             {keyResult && keyResult.items.length > 0 ? (
               keyResult.items.map((el: Item) => (
                 <ItemC key={el._id} item={el} />
               ))
             ) : (
-              <p>No Items</p>
+              <p>{t("no-items")}</p>
             )}
         </div>  
-        <div className="search-section-title">Collections</div>
+        <div className="search-section-title">{t('Collections')}</div>
         <div className="search-result-wrapper">
             {keyResult && keyResult.collections.length > 0 ? (
               keyResult.collections.map((el: Collection) => (
                 <CollectionC key={el._id} collection={el} />
               ))
             ) : (
-              <p>No collections</p>
+              <p>{t('no-collections')}</p>
             )}
         </div>  
-        <div className="search-section-title">Comments</div>
+        <div className="search-section-title">{t('Comments')}</div>
         <div className="search-result-wrapper">
           {keyResult && keyResult.comments.length > 0 ? (
             keyResult.comments.map((el: Comment) => (
               <div>
-                <p>Comment "{el.text}" at this <Link className="item_link" to={`/singleItem/${el.item_id}`}>Item</Link></p>
+                <p>{t('Comment')} "{el.text}" {t('at-this')} <Link className="item_link" to={`/singleItem/${el.item_id}`}>Item</Link></p>
               </div>  
             ))
           ) : (
-            <p>No comments</p>
+            <p>{t('no-comments')}</p>
           )}
         </div>  
-      </div>
+       </div>
       }
     </Container>
   );

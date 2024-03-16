@@ -28,9 +28,8 @@ export default function LangSwitcher() {
         label={t('nav-language')}
         onChange={handleChange}
       >
-        <MenuItem value='uz'>Uzbek</MenuItem>
-        <MenuItem value='ru'>Russian</MenuItem>
-        <MenuItem value='en'>English</MenuItem>
+      <MenuItem value='uz'>Uzbek</MenuItem>
+      <MenuItem value='en'>English</MenuItem>
       </Select>
     </FormControl>
   );

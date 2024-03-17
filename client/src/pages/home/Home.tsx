@@ -60,13 +60,13 @@ const Home:React.FC<HomeProps> = ({setSearch,search}) => {
           </div>
           <div className="section-title">
             <h3 className="collection-title">{t('item-title')}</h3>
-            <Button onClick={() => setItemStatus(!itemStatus)}>{itemStatus ? t('see-all-i') : t('hide')}</Button>
+            <Button onClick={() => setItemStatus(!itemStatus)}>{itemStatus ? t('hide') : t('see-all-i')}</Button>
           </div>
           <div className="latest-items-wrapper">
               {
-                itemStatus ? (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
+                itemStatus ? (items.result as Item[]).map((item: Item): JSX.Element => {
                   return <ItemC key={item._id} item={item}/>
-                }) : (items.result as Item[]).map((item: Item): JSX.Element => {
+                }) : (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
                   return <ItemC key={item._id} item={item}/>
                 })
               }

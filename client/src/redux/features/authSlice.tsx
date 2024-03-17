@@ -43,6 +43,7 @@ const signin = createAsyncThunk<SignUpResponse, User>(
   "/auth/login",
   async (data:User) => {
     try {
+      console.log(data)
       const response: AxiosResponse = await instance.post("/user/login", data);
       if (response.status === 200) {
         toast.success("Welcome :)");

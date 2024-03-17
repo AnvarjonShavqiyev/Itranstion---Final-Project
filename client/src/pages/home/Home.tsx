@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Nav from "../../components/nav/Nav"
 import { Container } from "../../utils/Utils"
 import './Home.scss'
@@ -12,6 +12,7 @@ import { getItems } from "../../redux/features/itemSlice"
 import Footer from "../../components/footer/Footer"
 import CollectionC from "../../components/collection/Collection"
 import ItemC from "../../components/item/Item"
+import { Button } from "@mui/material"
 
 interface HomeProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +24,8 @@ const Home:React.FC<HomeProps> = ({setSearch,search}) => {
   const dispatch = useDispatch<AppDispatch>()
   const collections = useSelector((state: RootState) => state.collections.collections) as Collection[];  
   const items = useSelector((state: RootState) => state.items.items) as Items;   
+  const [itemStatus, setItemStatus] = useState<boolean>(false)
+  const [colStatus, setColStatus] = useState<boolean>(false)
   useEffect(()=>{
     dispatch(getCollections())
     dispatch(getItems())
@@ -39,27 +42,31 @@ const Home:React.FC<HomeProps> = ({setSearch,search}) => {
               {
                items.tags && items.tags.map((tag: string, index: number) => {
                 return <Link className="tagName" to={`/search/${tag}`} key={index}>#{tag}</Link>
-              })
+               })
               }
           </div>
           <div className="section-title">
             <h3 className="collection-title">{t('collection-title')}</h3>
-            <Link to='/'>See all collections</Link>
+            <Button onClick={() => setColStatus(!colStatus)}>{colStatus ? t('hide') : t('see-all-c')}</Button>
           </div>
           <div className="largest-collections-wrapper">
               {
-                collections && collections.slice(0,5).map((collection:Collection) => {
+                colStatus ? collections && collections.map((collection:Collection) => {
+                  return <CollectionC key={collection._id} collection={collection}/>
+                }) : collections && collections.slice(0,5).map((collection:Collection) => {
                   return <CollectionC key={collection._id} collection={collection}/>
                 })
               }
           </div>
           <div className="section-title">
             <h3 className="collection-title">{t('item-title')}</h3>
-            <Link to='/'>See all items</Link>
+            <Button onClick={() => setItemStatus(!itemStatus)}>{itemStatus ? t('see-all-i') : t('hide')}</Button>
           </div>
           <div className="latest-items-wrapper">
               {
-                (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
+                itemStatus ? (items.result.slice(0, 5) as Item[]).map((item: Item): JSX.Element => {
+                  return <ItemC key={item._id} item={item}/>
+                }) : (items.result as Item[]).map((item: Item): JSX.Element => {
                   return <ItemC key={item._id} item={item}/>
                 })
               }

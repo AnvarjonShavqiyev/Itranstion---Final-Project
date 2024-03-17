@@ -17,10 +17,9 @@ export default function SignIn() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget); 
     const data = {
-      username: formData.get('name')?.toString() || '',
+      email: formData.get('email')?.toString() || '',
       password: formData.get('password')?.toString() || '',
     } as User;
-  
     dispatch(signin(data));
   };
   

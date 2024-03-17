@@ -6,7 +6,7 @@ import { searchByTag } from "../../redux/features/searchSlice";
 import { Container } from "../../utils/Utils";
 import "./SearchRpage.scss";
 import ItemC from "../../components/item/Item";
-import { Collection, Comment, Item } from "../../types/ElementTypes"; // Assuming correct import for Item and Collection
+import { Collection, Comment, Item } from "../../types/ElementTypes";
 import Nav from "../../components/nav/Nav";
 import CollectionC from "../../components/collection/Collection";
 import { useTranslation } from "react-i18next";

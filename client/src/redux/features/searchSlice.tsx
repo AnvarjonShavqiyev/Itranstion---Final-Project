@@ -14,7 +14,6 @@ const initialState: ResultState = {
   keyResult: null
 };
 
-
 const searchByKey = createAsyncThunk<KeySearchResult, string>(
   "searchByKey",
   async (key: string) => {

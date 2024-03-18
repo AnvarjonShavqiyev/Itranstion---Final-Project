@@ -47,39 +47,39 @@ const SearchRpage: React.FC<SearchRProps> = ({search,setSearch}) => {
       {
         search.length > 0 &&
         <div className="search-result-section">
-        <div className="search-section-title">{t('Items')}</div>
-        <div className="search-result-wrapper">
-            {keyResult && keyResult.items.length > 0 ? (
-              keyResult.items.map((el: Item) => (
-                <ItemC key={el._id} item={el} />
+          <div className="search-section-title">{t('Items')}</div>
+          <div className="search-result-wrapper">
+              {keyResult && keyResult.items.length > 0 ? (
+                keyResult.items.map((el: Item) => (
+                  <ItemC key={el._id} item={el} />
+                ))
+              ) : (
+                <p>{t("no-items")}</p>
+              )}
+          </div>  
+          <div className="search-section-title">{t('Collections')}</div>
+          <div className="search-result-wrapper">
+              {keyResult && keyResult.collections.length > 0 ? (
+                keyResult.collections.map((el: Collection) => (
+                  <CollectionC key={el._id} collection={el} />
+                ))
+              ) : (
+                <p>{t('no-collections')}</p>
+              )}
+          </div>  
+          <div className="search-section-title">{t('Comments')}</div>
+          <div className="search-result-wrapper">
+            {keyResult && keyResult.comments.length > 0 ? (
+              keyResult.comments.map((el: Comment) => (
+                <div>
+                  <p>{t('Comment')} "{el.text}" {t('at-this')} <Link className="item_link" to={`/singleItem/${el.item_id}`}>Item</Link></p>
+                </div>  
               ))
             ) : (
-              <p>{t("no-items")}</p>
+              <p>{t('no-comments')}</p>
             )}
-        </div>  
-        <div className="search-section-title">{t('Collections')}</div>
-        <div className="search-result-wrapper">
-            {keyResult && keyResult.collections.length > 0 ? (
-              keyResult.collections.map((el: Collection) => (
-                <CollectionC key={el._id} collection={el} />
-              ))
-            ) : (
-              <p>{t('no-collections')}</p>
-            )}
-        </div>  
-        <div className="search-section-title">{t('Comments')}</div>
-        <div className="search-result-wrapper">
-          {keyResult && keyResult.comments.length > 0 ? (
-            keyResult.comments.map((el: Comment) => (
-              <div>
-                <p>{t('Comment')} "{el.text}" {t('at-this')} <Link className="item_link" to={`/singleItem/${el.item_id}`}>Item</Link></p>
-              </div>  
-            ))
-          ) : (
-            <p>{t('no-comments')}</p>
-          )}
-        </div>  
-       </div>
+          </div>  
+        </div>
       }
     </Container>
   );

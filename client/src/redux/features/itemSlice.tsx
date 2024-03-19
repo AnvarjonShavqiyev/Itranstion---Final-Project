@@ -5,16 +5,27 @@ import instance from "../../api/axios";
 
 interface ItemsState {
   items: object | null;
+  item: object | null;
 }
 
 
 const initialState: ItemsState = {
   items: JSON.parse(localStorage.getItem("items") ?? "null"),
+  item: JSON.parse(localStorage.getItem("item") ?? "null"),
 };
 
 const getItems = createAsyncThunk<object>("/item", async () => {
   try {
     const response: AxiosResponse = await instance('/item');
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching collections:", error);
+    throw error;
+  }
+});
+const getSingleItem = createAsyncThunk<object,any>("/item/id", async (id:any) => {
+  try {
+    const response: AxiosResponse = await instance(`item/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching collections:", error);
@@ -29,10 +40,14 @@ const ItemsSlice = createSlice({
   extraReducers: (builder) => {
       builder.addCase(getItems.fulfilled, (state, action: PayloadAction<object>) => {
         state.items = action.payload;
-        localStorage.setItem("item", JSON.stringify(action.payload));
-    });
+        localStorage.setItem("items", JSON.stringify(action.payload));
+      });
+      builder.addCase(getSingleItem.fulfilled,(state, action: PayloadAction<object>) => {
+        state.items = action.payload;
+        localStorage.setItem("item", JSON.stringify(action.payload));        
+      })
   },
 });
 
-export { getItems };
+export { getItems,getSingleItem };
 export default ItemsSlice.reducer;

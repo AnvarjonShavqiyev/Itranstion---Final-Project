@@ -16,7 +16,7 @@ const SingleItem = () => {
   },[])
   console.log(item)
   return (
-    <Container>
+    item && <Container>
         <div className='single-item-wrapper'>
           <img src={item.image} alt="" />
           <div className='single-item-info'>
@@ -29,6 +29,7 @@ const SingleItem = () => {
                   })
                 }
               </div>
+              <p>{item.like} {item.like > 1 ? "likes" : "like"}</p>
               <div className='single-item-add-info'>
                 {
                   item.additionalInfo.length > 0 && 

@@ -11,7 +11,7 @@ const itemSchema = mongoose.Schema({
       type: [mongoose.Schema.Types.ObjectId],
       ref: "comments",
     },
-  likes: {type: Number},
+  likes: {type: Array},
   additionalInfo: {type: Array},
   date:{type:String}
 });

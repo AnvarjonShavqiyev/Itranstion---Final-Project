@@ -117,7 +117,8 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     image: newPath,
     tags: req.body.tags,
     additionalInfo: req.body.additionalInfo,
-    date: getTime()
+    date: getTime(),
+    like: 0
   });
 
   const result = await item.save();
@@ -142,6 +143,47 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     });
   }
 });
+router.post("/like/:id", async (req, res, next) => {
+  try {
+    const item = await Items.findById(req.params.id);
+    if (!item.likes.includes(req.body.id)) {
+      item.likes.push(req.body.id);
+      await item.save();
+      return res.status(200).json({
+        message: "Liked"
+      });
+    }
+    return res.status(500).json({
+      message: "Already Liked"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+router.post("/unlike/:id", async (req, res, next) => {
+  try {
+    const item = await Items.findById(req.params.id);
+    const index = item.likes.indexOf(req.body.id);
+    if (index !== -1) {
+      item.likes.splice(index, 1);
+      await item.save();
+      return res.status(200).json({
+        message: "Unliked"
+      });
+    }
+    return res.status(500).json({
+      message: "Already Unliked"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
 router.delete("/:id", (req, res, next) => {
   Items.findByIdAndDelete({ _id: req.params.id })
     .exec()

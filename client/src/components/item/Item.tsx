@@ -3,6 +3,7 @@ import { Item } from "../../types/ElementTypes"
 import { useTranslation } from "react-i18next"
 const ItemC = ({item}:{item:Item}) => {
   const { t } = useTranslation()
+  console.log(item)
   return (
     <div className="collection-wrapper" key={item._id}>
       <img width={400} height={350} src={item.image} alt="" />

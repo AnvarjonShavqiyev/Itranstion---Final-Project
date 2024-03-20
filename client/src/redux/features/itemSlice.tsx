@@ -26,6 +26,7 @@ const getItems = createAsyncThunk<object>("/item", async () => {
 const getSingleItem = createAsyncThunk<object,any>("/item/id", async (id:any) => {
   try {
     const response: AxiosResponse = await instance(`item/${id}`);
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching collections:", error);
@@ -43,7 +44,7 @@ const ItemsSlice = createSlice({
         localStorage.setItem("items", JSON.stringify(action.payload));
       });
       builder.addCase(getSingleItem.fulfilled,(state, action: PayloadAction<object>) => {
-        state.items = action.payload;
+        state.item = action.payload;
         localStorage.setItem("item", JSON.stringify(action.payload));        
       })
   },

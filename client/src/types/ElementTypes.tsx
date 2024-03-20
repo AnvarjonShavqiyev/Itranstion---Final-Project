@@ -16,7 +16,7 @@ export type Collection = {
     items:object[]
 }
 export type Comment = {
-    userId: string;
+    name: string;
     text: string;
     item_id: string
 };
@@ -26,7 +26,8 @@ export type Item = {
     tags: string,
     name: string,
     like: number,
-    comments: Comment[]
+    comments: Comment[],
+    additionalInfo: object[]
 }
 export type KeySearchResult = {
     collections: Collection[]

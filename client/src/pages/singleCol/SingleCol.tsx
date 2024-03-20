@@ -16,7 +16,7 @@
     },[id])
     console.log(collection)
     return (
-      <Container>
+      collection && <Container>
           <div className='single-col-wrapper'>
               <img src={collection.image} alt="" />
               <div className='single-col-info'>

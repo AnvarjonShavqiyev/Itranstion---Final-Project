@@ -33,6 +33,15 @@ const getSingleItem = createAsyncThunk<object,any>("/item/id", async (id:any) =>
     throw error;
   }
 });
+const doLike = createAsyncThunk<object,any>('item/like',async(id:any)=>{
+  try {
+    const response: AxiosResponse = await instance(`item/like/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching collections:", error);
+    throw error;
+  }
+})
 
 const ItemsSlice = createSlice({
   name: "item",
@@ -47,8 +56,12 @@ const ItemsSlice = createSlice({
         state.item = action.payload;
         localStorage.setItem("item", JSON.stringify(action.payload));        
       })
+      builder.addCase(doLike.fulfilled,(state, action: PayloadAction<object>) => {
+        console.log(action.payload,11)
+        localStorage.setItem("item", JSON.stringify(action.payload));        
+      })
   },
 });
 
-export { getItems,getSingleItem };
+export { getItems,getSingleItem,doLike };
 export default ItemsSlice.reducer;

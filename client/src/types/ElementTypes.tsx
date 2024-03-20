@@ -1,4 +1,5 @@
 export type User = {
+    _id:string,
     username: string,
     email: string,
     password: string
@@ -25,7 +26,7 @@ export type Item = {
     image: string,
     tags: string,
     name: string,
-    like: number,
+    likes: string[],
     comments: Comment[],
     additionalInfo: object[]
 }

@@ -5,16 +5,27 @@ import { useEffect } from 'react'
 import { getSingleItem } from '../../redux/features/itemSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
-import { Item } from '../../types/ElementTypes'
+import { Item, User } from '../../types/ElementTypes'
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { doLike } from '../../redux/features/itemSlice'
 import Avatar from '@mui/joy/Avatar';
 const SingleItem = () => {
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const item = useSelector((state:RootState) => state.items.item) as Item
+  const user = useSelector((state:RootState) => state.auth.user) as User
+  console.log(user,11)
   useEffect(() => {
     dispatch(getSingleItem(id))
   },[])
   console.log(item)
+  function addLike(){
+    dispatch(doLike(id))
+  }
+  function rmLike(){
+    console.log(2)
+  }
   return (
     item && <Container>
         <div className='single-item-wrapper'>
@@ -24,12 +35,15 @@ const SingleItem = () => {
               <div className='single-item-tags'>
                 <p>Tags:</p>
                 {
-                  item.tags.split("#").slice(1,item.tags.split('#').length).map((tag:string) => {
-                    return <Link className='tagName' to={`/search/${tag}`}>#{tag}</Link>
+                  item.tags.split("#").slice(1,item.tags.split('#').length).map((tag:string,index:number) => {
+                    return <Link key={index} className='tagName' to={`/search/${tag}`}>#{tag}</Link>
                   })
                 }
               </div>
-              <p>{item.like} {item.like > 1 ? "likes" : "like"}</p>
+              <div className='single-item-like'>
+                {item.likes.includes(user._id) ? <FaHeart onClick={() => rmLike()}/> : <FaRegHeart onClick={() => addLike()}/>}
+                <p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p>
+              </div>
               <div className='single-item-add-info'>
                 {
                   item.additionalInfo.length > 0 && 

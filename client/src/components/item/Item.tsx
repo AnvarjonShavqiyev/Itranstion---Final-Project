@@ -3,7 +3,6 @@ import { Item } from "../../types/ElementTypes"
 import { useTranslation } from "react-i18next"
 const ItemC = ({item}:{item:Item}) => {
   const { t } = useTranslation()
-  console.log(item)
   return (
     <div className="collection-wrapper" key={item._id}>
       <img width={400} height={350} src={item.image} alt="" />
@@ -17,7 +16,7 @@ const ItemC = ({item}:{item:Item}) => {
         </p>
       </div>
       <p>
-        0{item.like} {item.like > 1 ? ' ' + t('likes') : ' ' + t('like')}
+        {item.likes.length} {item.likes.length > 1 ? ' ' + t('likes') : ' ' + t('like')}
       </p>
     </div>
   )

@@ -57,7 +57,6 @@ const unLike = createAsyncThunk<object, { item_id: any, id: any }>(
 const addComment = createAsyncThunk<object, { data: Comment }>(
   'item/add-comment',
   async ({ data }) => {
-    console.log(data)
     try {
       const response: AxiosResponse = await instance.post(`comment/add-com/`, data);
       return response.data.item;
@@ -91,6 +90,7 @@ const ItemsSlice = createSlice({
       })
       builder.addCase(addComment.fulfilled,(state, action: PayloadAction<object>) => {
         state.item = action.payload
+        console.log(action.payload,11)
         localStorage.setItem("item", JSON.stringify(action.payload));   
       })
   },

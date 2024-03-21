@@ -27,24 +27,26 @@ router.post("/add-com", async (req, res, next) => {
     const item = await Items.findById(req.body.item_id).exec();
     if (!item) {
       return res.status(404).json({
-        message: "Item not found"
-      })
+        message: "Item not found",
+      });
     }
     const comment = new Comments({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       text: req.body.text,
-      item_id: req.body.item_id
+      item_id: req.body.item_id,
     });
 
     const result = await comment.save();
     item.comments.push(comment._id);
     await item.save();
-    const res = Items.findById(req.body.item_id).populate('comments').exec()
+    const newItem = await Items.findById(req.body.item_id)
+      .populate("comments")
+      .exec();
     res.status(200).json({
       message: "Successfully",
       comment: result,
-      item: res
+      item: newItem,
     });
   } catch (error) {
     return res.status(500).json({

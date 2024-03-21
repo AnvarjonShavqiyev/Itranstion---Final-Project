@@ -1,7 +1,11 @@
 export type User = {
     _id:string,
     name: string,
-    username:string,
+    email: string,
+    password: string
+}
+export type authUser = {
+    username: string,
     email: string,
     password: string
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { User } from "../../types/ElementTypes";
+import { User, authUser } from "../../types/ElementTypes";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
 import { toast } from "react-toastify";
@@ -15,9 +15,9 @@ interface AuthState {
   user: User | null;
 }
 
-const signup = createAsyncThunk<SignUpResponse, User>(
+const signup = createAsyncThunk<SignUpResponse, authUser>(
   "/auth/signup",
-  async (data:User) => {
+  async (data:authUser) => {
     try {
       const response: AxiosResponse = await instance.post("/user/signup", data);
       if (response.status === 201) {

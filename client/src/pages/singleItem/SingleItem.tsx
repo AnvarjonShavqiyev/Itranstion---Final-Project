@@ -15,7 +15,6 @@ const SingleItem = () => {
   const dispatch = useDispatch<AppDispatch>()
   const item = useSelector((state:RootState) => state.items.item) as Item
   const user = useSelector((state:RootState) => state.auth.user) as User
-  console.log(user)
   useEffect(() => {
     dispatch(getSingleItem(id))
   },[])

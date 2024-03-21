@@ -170,7 +170,7 @@ router.post("/unlike/:id", async (req, res, next) => {
       item.likes.splice(index, 1);
       await item.save();
       return res.status(200).json({
-        message: "Unliked"
+        item: item
       });
     }
     return res.status(500).json({

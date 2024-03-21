@@ -37,7 +37,19 @@ const doLike = createAsyncThunk<object, { item_id: any, id: any }>(
   async ({ item_id, id }) => {
     try {
       const response: AxiosResponse = await instance.post(`item/like/${item_id}`, { id: id });
-      return response.data;
+      return response.data.item;
+    } catch (error) {
+      console.error("Error liking item:", error);
+      throw error;
+    }
+  }
+);
+const unLike = createAsyncThunk<object, { item_id: any, id: any }>(
+  'item/like',
+  async ({ item_id, id }) => {
+    try {
+      const response: AxiosResponse = await instance.post(`item/unlike/${item_id}`, { id: id });
+      return response.data.item;
     } catch (error) {
       console.error("Error liking item:", error);
       throw error;
@@ -59,10 +71,15 @@ const ItemsSlice = createSlice({
         localStorage.setItem("item", JSON.stringify(action.payload));        
       })
       builder.addCase(doLike.fulfilled,(state, action: PayloadAction<object>) => {
-        
+        state.item = action.payload
+        localStorage.setItem("item", JSON.stringify(action.payload));   
+      })
+      builder.addCase(unLike.fulfilled,(state, action: PayloadAction<object>) => {
+        state.item = action.payload
+        localStorage.setItem("item", JSON.stringify(action.payload));   
       })
   },
 });
 
-export { getItems,getSingleItem,doLike };
+export { getItems,getSingleItem,doLike,unLike };
 export default ItemsSlice.reducer;

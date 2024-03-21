@@ -11,12 +11,15 @@ import { FaHeart } from "react-icons/fa";
 import { doLike } from '../../redux/features/itemSlice'
 import Avatar from '@mui/joy/Avatar';
 import { IoSend } from "react-icons/io5";
+import ActionController from '../../components/actionController/ActionController'
+import { useTranslation } from 'react-i18next'
 const SingleItem = () => {
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const item = useSelector((state:RootState) => state.items.item) as Item
   const user = useSelector((state:RootState) => state.auth.user) as User
   const [comment, setComment] = useState<string>('')
+  const {t} = useTranslation()
   useEffect(() => {
     dispatch(getSingleItem(id))
   },[])
@@ -39,12 +42,13 @@ const SingleItem = () => {
   console.log(item)
   return (
     item && <Container>
+        <ActionController/>
         <div className='single-item-wrapper'>
           <img src={item.image} alt="" />
           <div className='single-item-info'>
-              <p>Name: {item.name}</p>
+              <p>{t('name')}: {item.name}</p>
               <div className='single-item-tags'>
-                <p>Tags:</p>
+                <p>{t('tags')}:</p>
                 {
                   item.tags.split("#").slice(1,item.tags.split('#').length).map((tag:string,index:number) => {
                     return <Link key={index} className='tagName' to={`/search/${tag}`}>#{tag}</Link>
@@ -54,7 +58,7 @@ const SingleItem = () => {
               <div className='single-item-like'>
                {
                  user ? <>{item.likes.includes(user._id) ? <FaHeart className='like-btn' onClick={() => rmLike()}/> : <FaRegHeart className='unlike-btn' onClick={() => addLike()}/>}
-                 <p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p></>:<p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p>
+                 <p>{item.likes.length} {item.likes.length > 1 ? t('likes') : t('like')}</p></>:<p>{item.likes.length} {item.likes.length > 1 ? t('likes') : t('like')}</p>
                }
               </div>
               <div className='single-item-add-info'>
@@ -71,14 +75,14 @@ const SingleItem = () => {
         </div>
         {
           user && <div className='write-comment-wrapper'>
-              <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} className='comment-input' placeholder='Write comment'/>
+              <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} className='comment-input' placeholder={t('write-comment')}/>
               <IoSend className='send-btn' onClick={() => writeComment()}/>
           </div>
         }
         <div className='single-item-comments'>
             <div className='comments-header'>
-              <p>Comments</p>
-              <p>{item.comments.length} {item.comments.length > 1 ? "comments" : "comment"}</p>
+              <p>{t('Comments')}</p>
+              <p>{item.comments.length} {item.comments.length > 1 ? t('comments') : t("comment")}</p>
             </div>
             <div className='comments-wrapper'>
               {

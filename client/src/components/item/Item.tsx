@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Item } from "../../types/ElementTypes"
 import { useTranslation } from "react-i18next"
+import './Item.scss'
 const ItemC = ({item}:{item:Item}) => {
   const { t } = useTranslation()
   return (

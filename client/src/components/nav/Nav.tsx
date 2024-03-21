@@ -4,9 +4,9 @@ import './Nav.scss'
 import { Link } from 'react-router-dom';
 import LangSwitcher from '../langSwitcher/LangSwitcher';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
 import { searchByKey } from '../../redux/features/searchSlice';
 
 interface navProps {
@@ -20,7 +20,6 @@ const Nav:React.FC<navProps> = ({setSearch,search}) => {
   useEffect(() => {   
     dispatch(searchByKey(search))
   },[search])
-
   return (
     <Container>
         <div className='navbar-wrapper'>

@@ -29,6 +29,7 @@
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   border: 1px solid #c0bebe;
+  margin-bottom: 50px;
 }
 .comment {
   display: flex;
@@ -93,4 +94,17 @@
   outline: none;
   text-indent: 12px;
   font-size: 20px;
+}
+@media only screen and (max-width: 600px) {
+  .single-item-wrapper {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .single-item-info {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

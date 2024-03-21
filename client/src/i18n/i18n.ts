@@ -30,6 +30,12 @@ i18n.use(initReactI18next).init({
         "see-all-c": "See all Collections",
         "see-all-i": "See all Items",
         hide: "Hide",
+        name: "Name",
+        topic: "Topic",
+        description: "Description",
+        "items-count": "Items count",
+        tags: "Tags",
+        'write-comment':"Write comment"
       },
     },
     uz: {
@@ -59,6 +65,12 @@ i18n.use(initReactI18next).init({
         "see-all-c": "Barcha to'plamlarni ko'rish",
         "see-all-i": "Barcha buyumlarni ko'rish",
         hide: "Yashirish",
+        name: "Ism",
+        topic: "Mavzu",
+        description: "Izoh",
+        "items-count": "Buyumlar soni",
+        tags: "Taglar",
+        'write-comment':"Izoh yozish"
       },
     },
   },

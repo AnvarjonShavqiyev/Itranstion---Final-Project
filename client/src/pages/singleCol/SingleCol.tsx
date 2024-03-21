@@ -7,8 +7,11 @@
   import { getSingleCollection } from '../../redux/features/collectionSlice'
   import { Collection } from '../../types/ElementTypes'
   import ItemC from '../../components/item/Item'
+  import ActionController from '../../components/actionController/ActionController'
+import { useTranslation } from 'react-i18next'
   const SingleCol = () => {
     const {id} = useParams()
+    const {t} = useTranslation()
     const dispatch = useDispatch<AppDispatch>()
     const collection = useSelector((state:RootState) => state.collections.collection) as Collection
     useEffect(() => {
@@ -17,13 +20,14 @@
     console.log(collection)
     return (
       collection && <Container>
+          <ActionController/>
           <div className='single-col-wrapper'>
-              <img src={collection.image} alt="" />
+              <img className='single-col-image' src={collection.image} alt="" />
               <div className='single-col-info'>
-                  <p>Name: {collection.name}</p>
-                  <p>Topic: {collection.topic}</p>
-                  <p>Description:<br/>{collection.discreption}</p>
-                  <p>Items count: {collection.items.length}</p>
+                  <p>{t('name')}: {collection.name}</p>
+                  <p>{t('topic')}: {collection.topic}</p>
+                  <p>{t('description')}:<br/>{collection.discreption}</p>
+                  <p>{t('items-count')}: {collection.items.length}</p>
               </div>
           </div>
           <div className='single-col-items'>

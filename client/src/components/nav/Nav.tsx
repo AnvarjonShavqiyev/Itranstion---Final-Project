@@ -4,11 +4,15 @@ import './Nav.scss'
 import { Link } from 'react-router-dom';
 import LangSwitcher from '../langSwitcher/LangSwitcher';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { searchByKey } from '../../redux/features/searchSlice';
-
+import Dropdown from '@mui/joy/Dropdown';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
+import { logOut } from '../../redux/features/authSlice';
 interface navProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   search:string,
@@ -17,6 +21,7 @@ interface navProps {
 const Nav:React.FC<navProps> = ({setSearch,search}) => {
   const {t} = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
+  const userState = useSelector((state:RootState) => state.auth.token)
   useEffect(() => {   
     dispatch(searchByKey(search))
   },[search])
@@ -30,7 +35,15 @@ const Nav:React.FC<navProps> = ({setSearch,search}) => {
               </div>
               <div className='nav-reg-wrapper'>
                   <LangSwitcher/>
-                  <Link to='/signIn'>{t('nav-login')}</Link>
+                  {
+                    userState ? <Dropdown>
+                    <MenuButton className="dashboard-title">Dashboard</MenuButton>
+                    <Menu>
+                      <MenuItem><Link to='/dashboard'>My account</Link></MenuItem>
+                      <MenuItem onClick={() => dispatch(logOut())}>Logout</MenuItem>
+                    </Menu>
+                  </Dropdown> : <Link to='/signIn'>{t('nav-login')}</Link>
+                  }
               </div>
         </div>
     </Container>

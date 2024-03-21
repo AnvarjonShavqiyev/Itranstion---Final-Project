@@ -26,22 +26,24 @@ const getItems = createAsyncThunk<object>("/item", async () => {
 const getSingleItem = createAsyncThunk<object,any>("/item/id", async (id:any) => {
   try {
     const response: AxiosResponse = await instance(`item/${id}`);
-    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching collections:", error);
     throw error;
   }
 });
-const doLike = createAsyncThunk<object,any>('item/like',async(id:any)=>{
-  try {
-    const response: AxiosResponse = await instance(`item/like/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching collections:", error);
-    throw error;
+const doLike = createAsyncThunk<object, { item_id: any, id: any }>(
+  'item/like',
+  async ({ item_id, id }) => {
+    try {
+      const response: AxiosResponse = await instance.post(`item/like/${item_id}`, { id: id });
+      return response.data;
+    } catch (error) {
+      console.error("Error liking item:", error);
+      throw error;
+    }
   }
-})
+);
 
 const ItemsSlice = createSlice({
   name: "item",
@@ -57,8 +59,7 @@ const ItemsSlice = createSlice({
         localStorage.setItem("item", JSON.stringify(action.payload));        
       })
       builder.addCase(doLike.fulfilled,(state, action: PayloadAction<object>) => {
-        console.log(action.payload,11)
-        localStorage.setItem("item", JSON.stringify(action.payload));        
+        console.log(action.payload)      
       })
   },
 });

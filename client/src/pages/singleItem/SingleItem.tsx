@@ -15,19 +15,18 @@ const SingleItem = () => {
   const dispatch = useDispatch<AppDispatch>()
   const item = useSelector((state:RootState) => state.items.item) as Item
   const user = useSelector((state:RootState) => state.auth.user) as User
-  console.log(user,11)
   useEffect(() => {
     dispatch(getSingleItem(id))
   },[])
-  console.log(item)
   function addLike(){
-    dispatch(doLike(id))
+    dispatch(doLike({ item_id: id, id: user._id }));
   }
   function rmLike(){
-    console.log(2)
+    console.log(2)  
   }
+  console.log(item)
   return (
-    item && <Container>
+    item && user && <Container>
         <div className='single-item-wrapper'>
           <img src={item.image} alt="" />
           <div className='single-item-info'>
@@ -41,7 +40,7 @@ const SingleItem = () => {
                 }
               </div>
               <div className='single-item-like'>
-                {item.likes.includes(user._id) ? <FaHeart onClick={() => rmLike()}/> : <FaRegHeart onClick={() => addLike()}/>}
+                {item.likes.includes(user._id) ? <FaHeart className='like-btn' onClick={() => rmLike()}/> : <FaRegHeart className='unlike-btn' onClick={() => addLike()}/>}
                 <p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p>
               </div>
               <div className='single-item-add-info'>
@@ -63,8 +62,8 @@ const SingleItem = () => {
             </div>
             <div className='comments-wrapper'>
               {
-                item.comments.length > 0 ? item.comments.map(comment => {
-                  return <div className='comment'>
+                item.comments.length > 0 ? item.comments.map((comment,index) => {
+                  return <div key={index} className='comment'>
                     <div className='user-info'>
                       <Avatar>{comment.name[0]}</Avatar>
                       <strong className='user-name'>{comment.name}</strong>
@@ -74,7 +73,7 @@ const SingleItem = () => {
                 }) : <p>No Comments</p>
               }
             </div>
-          </div>
+        </div>
     </Container>
   )
 }

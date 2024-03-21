@@ -146,8 +146,8 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
 router.post("/like/:id", async (req, res, next) => {
   try {
     const item = await Items.findById(req.params.id);
-    if (!item.likes.includes(req.params.id)) {
-      item.likes.push(req.params.id);
+    if (!item.likes.includes(req.body.id)){
+      item.likes.push(req.body.id);
       await item.save();
       return res.status(200).json({
         message: "Liked"

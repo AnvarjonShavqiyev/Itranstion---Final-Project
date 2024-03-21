@@ -45,7 +45,7 @@ const doLike = createAsyncThunk<object, { item_id: any, id: any }>(
   }
 );
 const unLike = createAsyncThunk<object, { item_id: any, id: any }>(
-  'item/like',
+  'item/unlike',
   async ({ item_id, id }) => {
     try {
       const response: AxiosResponse = await instance.post(`item/unlike/${item_id}`, { id: id });

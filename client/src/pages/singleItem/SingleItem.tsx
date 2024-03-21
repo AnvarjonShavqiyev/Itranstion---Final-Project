@@ -2,7 +2,7 @@ import { Container } from '@mui/material'
 import './SingleItem.scss'
 import { Link, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { getSingleItem } from '../../redux/features/itemSlice'
+import { getSingleItem, unLike } from '../../redux/features/itemSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Item, User } from '../../types/ElementTypes'
@@ -22,9 +22,8 @@ const SingleItem = () => {
     dispatch(doLike({ item_id: id, id: user._id }));
   }
   function rmLike(){
-    console.log(2)  
+    dispatch(unLike({ item_id: id, id: user._id }));
   }
-  console.log(item)
   return (
     item && user && <Container>
         <div className='single-item-wrapper'>

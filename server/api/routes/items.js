@@ -145,7 +145,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
 });
 router.post("/like/:id", async (req, res, next) => {
   try {
-    const item = await Items.findById(req.params.id);
+    const item = await Items.findById(req.params.id).populate("comments").exec();
     if (!item.likes.includes(req.body.id)){
       item.likes.push(req.body.id);
       await item.save();
@@ -164,7 +164,7 @@ router.post("/like/:id", async (req, res, next) => {
 });
 router.post("/unlike/:id", async (req, res, next) => {
   try {
-    const item = await Items.findById(req.params.id);
+    const item = await Items.findById(req.params.id).populate("comments").exec();
     const index = item.likes.indexOf(req.body.id);
     if (index !== -1) {
       item.likes.splice(index, 1);

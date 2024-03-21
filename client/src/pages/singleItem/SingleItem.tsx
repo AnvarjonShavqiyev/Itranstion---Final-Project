@@ -27,12 +27,13 @@ const SingleItem = () => {
     dispatch(unLike({ item_id: id, id: user._id }));
   }
   function writeComment(){
+    setComment("")
     id && dispatch(addComment({
       data: {
         name: user.name,
         text: comment,
         item_id: id
-      }
+    }
     }));
   }
   console.log(item)
@@ -70,7 +71,7 @@ const SingleItem = () => {
         </div>
         {
           user && <div className='write-comment-wrapper'>
-              <input type="text" onChange={(e) => setComment(e.target.value)} className='comment-input' placeholder='Write comment'/>
+              <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} className='comment-input' placeholder='Write comment'/>
               <IoSend className='send-btn' onClick={() => writeComment()}/>
           </div>
         }

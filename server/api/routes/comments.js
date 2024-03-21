@@ -45,6 +45,7 @@ router.post("/add-com", async (req, res, next) => {
     res.status(200).json({
       message: "Successfully",
       comment: result,
+      item: item
     });
   } catch (error) {
     return res.status(500).json({

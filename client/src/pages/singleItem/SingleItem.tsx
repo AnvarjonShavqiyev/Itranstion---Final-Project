@@ -10,6 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { doLike } from '../../redux/features/itemSlice'
 import Avatar from '@mui/joy/Avatar';
+import { IoSend } from "react-icons/io5";
 const SingleItem = () => {
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>()
@@ -24,8 +25,9 @@ const SingleItem = () => {
   function rmLike(){
     dispatch(unLike({ item_id: id, id: user._id }));
   }
+  console.log(item)
   return (
-    item && user && <Container>
+    item && <Container>
         <div className='single-item-wrapper'>
           <img src={item.image} alt="" />
           <div className='single-item-info'>
@@ -39,8 +41,10 @@ const SingleItem = () => {
                 }
               </div>
               <div className='single-item-like'>
-                {item.likes.includes(user._id) ? <FaHeart className='like-btn' onClick={() => rmLike()}/> : <FaRegHeart className='unlike-btn' onClick={() => addLike()}/>}
-                <p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p>
+               {
+                 user ? <>{item.likes.includes(user._id) ? <FaHeart className='like-btn' onClick={() => rmLike()}/> : <FaRegHeart className='unlike-btn' onClick={() => addLike()}/>}
+                 <p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p></>:<p>{item.likes.length} {item.likes.length > 1 ? "likes" : "like"}</p>
+               }
               </div>
               <div className='single-item-add-info'>
                 {
@@ -54,6 +58,12 @@ const SingleItem = () => {
               </div>
           </div>
         </div>
+        {
+          user && <div className='write-comment-wrapper'>
+              <input type="text" className='comment-input' placeholder='Write comment'/>
+              <IoSend className='send-btn'/>
+          </div>
+        }
         <div className='single-item-comments'>
             <div className='comments-header'>
               <p>Comments</p>

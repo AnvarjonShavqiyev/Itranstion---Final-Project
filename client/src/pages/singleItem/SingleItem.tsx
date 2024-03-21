@@ -1,8 +1,8 @@
 import { Container } from '@mui/material'
 import './SingleItem.scss'
 import { Link, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { getSingleItem, unLike } from '../../redux/features/itemSlice'
+import { useEffect, useState } from 'react'
+import { addComment, getSingleItem, unLike } from '../../redux/features/itemSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Item, User } from '../../types/ElementTypes'
@@ -16,6 +16,7 @@ const SingleItem = () => {
   const dispatch = useDispatch<AppDispatch>()
   const item = useSelector((state:RootState) => state.items.item) as Item
   const user = useSelector((state:RootState) => state.auth.user) as User
+  const [comment, setComment] = useState<string>('')
   useEffect(() => {
     dispatch(getSingleItem(id))
   },[])
@@ -24,6 +25,15 @@ const SingleItem = () => {
   }
   function rmLike(){
     dispatch(unLike({ item_id: id, id: user._id }));
+  }
+  function writeComment(){
+    id && dispatch(addComment({
+      data: {
+        name: user.name,
+        text: comment,
+        item_id: id
+      }
+    }));
   }
   console.log(item)
   return (
@@ -60,8 +70,8 @@ const SingleItem = () => {
         </div>
         {
           user && <div className='write-comment-wrapper'>
-              <input type="text" className='comment-input' placeholder='Write comment'/>
-              <IoSend className='send-btn'/>
+              <input type="text" onChange={(e) => setComment(e.target.value)} className='comment-input' placeholder='Write comment'/>
+              <IoSend className='send-btn' onClick={() => writeComment()}/>
           </div>
         }
         <div className='single-item-comments'>

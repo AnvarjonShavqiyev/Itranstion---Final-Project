@@ -19,13 +19,12 @@ router.get("/", async (req, res, next) => {
 
 router.post("/add-com", async (req, res, next) => {
   try {
-    console.log(req.body)
     if (!req.body.name || !req.body.text || !req.body.item_id) {
       return res.status(404).json({
         error: "Username, Text or item_id not given",
       });
     }
-    const item = await Items.findById(req.body.item_id);
+    const item = await Items.findById(req.body.item_id).populate('comments').exec();
     if (!item) {
       return res.status(404).json({
         message: "Item not found"

@@ -1,6 +1,6 @@
 export type User = {
     _id:string,
-    username: string,
+    name: string,
     email: string,
     password: string
 }
@@ -19,7 +19,7 @@ export type Collection = {
 export type Comment = {
     name: string;
     text: string;
-    item_id: string
+    item_id: string;
 };
 export type Item = {
     _id: string,

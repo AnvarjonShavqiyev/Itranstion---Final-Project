@@ -150,7 +150,7 @@ router.post("/like/:id", async (req, res, next) => {
       item.likes.push(req.body.id);
       await item.save();
       return res.status(200).json({
-        message: "Liked"
+        item: item
       });
     }
     return res.status(500).json({

@@ -59,7 +59,7 @@ const ItemsSlice = createSlice({
         localStorage.setItem("item", JSON.stringify(action.payload));        
       })
       builder.addCase(doLike.fulfilled,(state, action: PayloadAction<object>) => {
-        console.log(action.payload)      
+        
       })
   },
 });

@@ -1,7 +1,10 @@
-import './Dashboard.scss'
+import AdminNav from "../../components/adminNav/AdminNav"
+
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div>
+      <AdminNav/>
+    </div>
   )
 }
 

@@ -2,7 +2,9 @@ export type User = {
     _id:string,
     name: string,
     email: string,
-    password: string
+    password: string,
+    role: string,
+    collections: Collection[]
 }
 export type authUser = {
     username: string,

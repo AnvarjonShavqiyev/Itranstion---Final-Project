@@ -13,6 +13,7 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import { logOut } from '../../redux/features/authSlice';
+import { Avatar } from '@mui/material';
 interface navProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   search:string,
@@ -37,7 +38,7 @@ const Nav:React.FC<navProps> = ({setSearch,search}) => {
                   <LangSwitcher/>
                   {
                     userState ? <Dropdown>
-                    <MenuButton className="dashboard-title">Dashboard</MenuButton>
+                    <MenuButton className="dashboard-title"><Avatar src="/broken-image.jpg" /></MenuButton>
                     <Menu>
                       <MenuItem><Link to='/dashboard'>My account</Link></MenuItem>
                       <MenuItem onClick={() => dispatch(logOut())}>Logout</MenuItem>

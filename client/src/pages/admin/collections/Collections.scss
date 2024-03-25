@@ -2,19 +2,3 @@
   padding: 20px;
   width: 100%;
 }
-.actions-wrapper button {
-  border: none;
-  border-radius: 5px;
-  padding: 5px 8px;
-  color: #fff;
-  margin-right: 8px;
-}
-.actions-wrapper button:first-child {
-  background-color: #2962ff;
-}
-.actions-wrapper button:nth-child(2) {
-  background-color: rgb(238, 255, 0);
-}
-.actions-wrapper button:last-child {
-  background-color: red;
-}

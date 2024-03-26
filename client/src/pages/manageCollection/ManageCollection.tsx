@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import './ManageCollection.scss';
 import AdminNav from '../../components/adminNav/AdminNav';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import defImage from '../../assets/images/k1.jpg';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
-import { createCollection } from '../../redux/features/collectionSlice';
+import { createCollection, getSingleCollection } from '../../redux/features/collectionSlice';
 import { ToastContainer } from 'react-toastify';
 
 const ManageCollection = () => {
@@ -15,6 +15,7 @@ const ManageCollection = () => {
   const [description, setDescription] = useState<string>(''); 
   const [topic, setTopic] = useState<string>(''); 
   const dispatch = useDispatch<AppDispatch>()
+  
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -32,7 +33,9 @@ const ManageCollection = () => {
       id && collectionForm.append('user_id', id)
       dispatch(createCollection(collectionForm))
   }
-
+  useEffect(() => {
+    id && dispatch(getSingleCollection(id))
+  },[])
   return (
     <div className='manage-collection-wrapper'>
       <AdminNav />
@@ -59,7 +62,9 @@ const ManageCollection = () => {
           <button type='submit' className='create-btn'>Create</button>
         </form>
       ) : (
-        <div className='edit-content-wrapper'></div>
+        <div className='edit-content-wrapper'>
+
+        </div>
       )}
       <ToastContainer/>
     </div>

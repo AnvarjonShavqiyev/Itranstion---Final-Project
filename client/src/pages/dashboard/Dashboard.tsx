@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-wrapper">
         <div className="actions-wrapper">
           <Link to={`manage-collection/create/${user._id}`}>Create</Link>
-          <Link to='manage-collection/edit'>Edit</Link>
+          <Link to={`manage-collection/edit/${collectionIds[collectionIds.length-1]}`}>Edit</Link>
           <button onClick={() => handleDelete()}>Delete</button>
         </div>
         <AdminTable collections={collections} collectionIds={collectionIds} setCollectionIds={setCollectionIds} />

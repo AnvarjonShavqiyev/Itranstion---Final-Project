@@ -68,10 +68,28 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     const result = await collection.save();
     user.collections.push(result._id);
     await user.save();
-    res.status(200).json({
-      message: "Successfully",
-      collection: result,
-    });
+    if(user.role === 'admin'){
+      const collections = await Collection.find()
+      .populate({
+        path: "items",
+        populate: "comments",
+      })
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    }else{
+      const doc = await User.findById(req.body.user_id).populate({
+        path: "collections",
+        populate: { path: "items", populate: "comments" },
+      }).exec();
+      const collections = doc.collections
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    }
+    
   } catch (error) {
     return res.status(500).json({
       error: error.message,

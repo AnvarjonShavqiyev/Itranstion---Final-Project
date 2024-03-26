@@ -35,6 +35,8 @@ const getSingleCollection = createAsyncThunk<Collection, string>("/collection/:i
   }
 })
 
+// const deleteCollections = createAsyncThunk<>
+
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/collection/add-col", data);
@@ -56,6 +58,10 @@ const CollectionSlice = createSlice({
       localStorage.setItem("collections", JSON.stringify(action.payload));
     });
     builder.addCase(getSingleCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
+      state.collection = action.payload;
+      localStorage.setItem("collection", JSON.stringify(action.payload))
+    })
+    builder.addCase(createCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collection = action.payload;
       localStorage.setItem("collection", JSON.stringify(action.payload))
     })

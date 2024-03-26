@@ -20,12 +20,15 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Collection.find().populate({
-        path: "items", populate: "comments",
-      }).exec();
+    const result = await Collection.find()
+      .populate({
+        path: "items",
+        populate: "comments",
+      })
+      .exec();
     result.sort((a, b) => b.items.length - a.items.length);
     res.status(200).json({
-      collections: result
+      collections: result,
     });
   } catch (error) {
     res.status(500).json({
@@ -48,6 +51,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 router.post("/add-col", upload.single("image"), async (req, res, next) => {
+  console.log(req.body);
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;
   const { path } = image;
@@ -60,10 +64,10 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     topic: req.body.topic,
   });
   try {
+    const user = await User.findById(req.body.user_id);
     const result = await collection.save();
-    const user = User.findById(req.body.user_id)
-    user.collections.push(result._id)
-    await user.save()
+    user.collections.push(result._id);
+    await user.save();
     res.status(200).json({
       message: "Successfully",
       collection: result,
@@ -92,8 +96,8 @@ router.delete("/:id", (req, res, next) => {
 router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
     const uploader = async (path) => await cloudinary.uploads(path, "Images");
-    const image = req.file
-    const {path} = image
+    const image = req.file;
+    const { path } = image;
     const newPath = await uploader(path);
     const id = req.params.id;
     const updates = {
@@ -101,12 +105,12 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       discreption: req.body.discreption,
       image: newPath,
       topic: req.body.topic,
-    }
+    };
     const options = { new: true };
     const result = await Collection.findByIdAndUpdate(id, updates, options);
     res.status(200).json({
       result,
-      message:"Collection updated"
+      message: "Collection updated",
     });
   } catch (error) {
     res.status(500).json({

@@ -21,7 +21,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/singleItem/:id" element={<SingleItem />} />
       <Route path="/dashboard" element={<Private />}>
         <Route path="" element={<Dashboard />}/>
-        <Route path="manage-collection/:type/" element={<ManageCollection />} />
         <Route path="manage-collection/:type/:id" element={<ManageCollection />} />
       </Route>
     </Routes>

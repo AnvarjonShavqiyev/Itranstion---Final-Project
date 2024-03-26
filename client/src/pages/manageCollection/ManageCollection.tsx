@@ -8,7 +8,7 @@ import { AppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/features/collectionSlice';
 
 const ManageCollection = () => {
-  const { type } = useParams();
+  const { type, id } = useParams();
   const [image, setImage] = useState<File | null | any>(null); 
   const [name, setName] = useState<string>(''); 
   const [description, setDescription] = useState<string>(''); 
@@ -28,6 +28,7 @@ const ManageCollection = () => {
       collectionForm.append('image',image)
       collectionForm.append('discreption',description)
       collectionForm.append('topic',topic)
+      id && collectionForm.append('user_id', id)
       dispatch(createCollection(collectionForm))
   }
 

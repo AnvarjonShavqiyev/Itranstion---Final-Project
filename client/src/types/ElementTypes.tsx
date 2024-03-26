@@ -4,7 +4,7 @@ export type User = {
     email: string,
     password: string,
     role: string,
-    collections: Collection[]
+    collections: Collection[],
 }
 export type authUser = {
     username: string,

@@ -52,7 +52,6 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
   const image = req.file;
   const { path } = image;
   const newPath = await uploader(path);
-  const user = user()
   const collection = new Collection({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,

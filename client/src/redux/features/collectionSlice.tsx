@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
 import { Collection } from "../../types/ElementTypes";
+import { toast } from "react-toastify";
 
 interface CollectionsState {
   collections: object | null;
@@ -34,6 +35,19 @@ const getSingleCollection = createAsyncThunk<Collection, string>("/collection/:i
   }
 })
 
+const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
+  try{
+    console.log(data)
+    const response: AxiosResponse = await instance.post("/collection/add-col", data);
+    console.log(response)
+    if (response.status === 200) {
+      toast.success("Welcome :)");
+    }
+    return response.data;
+  }catch(error){
+    console.log(error)
+  }
+})
 const CollectionSlice = createSlice({
   name: "collection",
   initialState,
@@ -50,5 +64,5 @@ const CollectionSlice = createSlice({
   },
 });
 
-export { getCollections, getSingleCollection };
+export { getCollections, getSingleCollection, createCollection };
 export default CollectionSlice.reducer;

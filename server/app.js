@@ -9,10 +9,8 @@ mongoose.connect(
 const corsOptions = {
   origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
   optionsSuccessStatus: 204,
 };
-
 const userRoutes = require("./api/routes/user");
 const collectionRoutes = require("./api/routes/collection");
 const itemRoutes = require("./api/routes/items");

@@ -34,6 +34,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 router.post("/login", (req, res, next) => {
+  console.log(req.body)
   User.findOne({ email: req.body.email }).populate({
       path: "collections",
       populate: { path: "items", populate: "comments" },

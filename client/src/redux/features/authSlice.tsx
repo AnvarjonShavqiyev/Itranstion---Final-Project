@@ -19,7 +19,10 @@ const signup = createAsyncThunk<SignUpResponse, authUser>(
   "/auth/signup",
   async (data:authUser) => {
     try {
-      const response: AxiosResponse = await instance.post("/user/signup", data);
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      const response: AxiosResponse = await instance.post("/user/signup", data, {headers});
       if (response.status === 201) {
         toast.success("Successfully registered :)");
         setTimeout(() => {
@@ -43,8 +46,11 @@ const signin = createAsyncThunk<SignUpResponse, User>(
   "/auth/login",
   async (data:User) => {
     try {
-      console.log(data)
-      const response: AxiosResponse = await instance.post("/user/login", data);
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      const response: AxiosResponse = await instance.post("/user/login", data, {headers});
+      console.log(response)
       if (response.status === 200) {
         toast.success("Welcome :)");
       }

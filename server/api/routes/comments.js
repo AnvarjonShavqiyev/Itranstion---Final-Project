@@ -16,7 +16,6 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
-
 router.post("/add-com", async (req, res, next) => {
   try {
     if (!req.body.name || !req.body.text || !req.body.item_id) {

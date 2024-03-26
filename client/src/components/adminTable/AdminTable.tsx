@@ -29,8 +29,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function AdminTable({ collections }: { collections: Collection[] }) {
-  const [collectionIds, setCollectionIds] = useState<string[]>([]);
+export default function AdminTable({ collections, collectionIds, setCollectionIds }: { collections: Collection[], collectionIds: string[], setCollectionIds: React.Dispatch<React.SetStateAction<string[]>> }) {
+  
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   
   const handleCheckboxChange = (collectionId: string) => {

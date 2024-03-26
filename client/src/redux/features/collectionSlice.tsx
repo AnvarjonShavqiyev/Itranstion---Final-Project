@@ -35,15 +35,25 @@ const getSingleCollection = createAsyncThunk<Collection, string>("/collection/:i
   }
 })
 
-// const deleteCollections = createAsyncThunk<>
+const deleteCollections = createAsyncThunk<string[], string[]>('/collection/delete-many', async(data:string[]) => {
+  try {
+    const response: AxiosResponse = await instance.delete('/collection/delete',{data:{collectionIds:data}});
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching collections:", error);
+    throw error;
+  }
+})
 
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/collection/add-col", data);
+    console.log(response)
     if (response.status === 200) {
       toast.success("Collection created :)");
     }
-    return response.data;
+    return response.data.collections;
   }catch(error){
     console.log(error)
   }
@@ -62,11 +72,11 @@ const CollectionSlice = createSlice({
       localStorage.setItem("collection", JSON.stringify(action.payload))
     })
     builder.addCase(createCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
-      state.collection = action.payload;
-      localStorage.setItem("collection", JSON.stringify(action.payload))
+      state.collections = action.payload;
+      localStorage.setItem("collections", JSON.stringify(action.payload))
     })
   },
 });
 
-export { getCollections, getSingleCollection, createCollection };
+export { getCollections, getSingleCollection, createCollection, deleteCollections };
 export default CollectionSlice.reducer;

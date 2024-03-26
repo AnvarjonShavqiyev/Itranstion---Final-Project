@@ -6,6 +6,7 @@ import defImage from '../../assets/images/k1.jpg';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/features/collectionSlice';
+import { ToastContainer } from 'react-toastify';
 
 const ManageCollection = () => {
   const { type, id } = useParams();
@@ -60,6 +61,7 @@ const ManageCollection = () => {
       ) : (
         <div className='edit-content-wrapper'></div>
       )}
+      <ToastContainer/>
     </div>
   );
 };

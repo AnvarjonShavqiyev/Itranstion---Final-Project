@@ -37,11 +37,9 @@ const getSingleCollection = createAsyncThunk<Collection, string>("/collection/:i
 
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
-    console.log(data)
     const response: AxiosResponse = await instance.post("/collection/add-col", data);
-    console.log(response)
     if (response.status === 200) {
-      toast.success("Welcome :)");
+      toast.success("Collection created :)");
     }
     return response.data;
   }catch(error){

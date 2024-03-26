@@ -78,6 +78,23 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     });
   }
 });
+router.delete("/delete", async (req, res, next) => {
+  try {
+    const collectionIds = req.body.collectionIds;
+    if (!collectionIds) {
+      return res
+        .status(400)
+        .json({ error: "userIds are required in the request body" });
+    }
+    const filter = { _id: { $in: collectionIds } };
+    const result = await Collection.deleteMany(filter);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+});
 router.delete("/:id", (req, res, next) => {
   Collection.findByIdAndDelete({ _id: req.params.id })
     .exec()

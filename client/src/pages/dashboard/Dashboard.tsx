@@ -7,6 +7,7 @@ import { Link, Outlet } from "react-router-dom";
 import AdminNav from "../../components/adminNav/AdminNav";
 import AdminTable from "../../components/adminTable/AdminTable";
 import { deleteCollections } from "../../redux/features/collectionSlice";
+import { ToastContainer } from "react-toastify";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user) as User;
@@ -24,7 +25,7 @@ const Dashboard: React.FC = () => {
   }, [user, allCollections]);
 
   function handleDelete(){
-    dispatch(deleteCollections(collectionIds))
+    dispatch(deleteCollections([collectionIds,user._id]))
   }
   return (
     <div>
@@ -38,6 +39,7 @@ const Dashboard: React.FC = () => {
         <AdminTable collections={collections} collectionIds={collectionIds} setCollectionIds={setCollectionIds} />
         <Outlet/>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

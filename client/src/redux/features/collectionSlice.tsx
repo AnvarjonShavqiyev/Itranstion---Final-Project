@@ -35,16 +35,28 @@ const getSingleCollection = createAsyncThunk<Collection, string>("/collection/:i
   }
 })
 
-const deleteCollections = createAsyncThunk<string[], string[]>('/collection/delete-many', async(data:string[]) => {
-  try {
-    const response: AxiosResponse = await instance.delete('/collection/delete',{data:{collectionIds:data}});
-    console.log(response)
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching collections:", error);
-    throw error;
+const deleteCollections = createAsyncThunk<string[], [string[], string]>(
+  '/collection/deletemany',
+  async ([collectionIds, id]) => {
+    try {
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      const response: AxiosResponse = await instance.delete("/collection/delete", {
+        headers,
+        data: { collectionIds, id }
+      });
+      if(response.status === 200){
+        toast.success('Collections deleted :)')
+        return response.data.collections;
+      }
+    } catch (error) {
+      console.error("Error deleting collections:", error);
+      throw error;
+    }
   }
-})
+);
+
 
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
@@ -70,11 +82,16 @@ const CollectionSlice = createSlice({
     builder.addCase(getSingleCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collection = action.payload;
       localStorage.setItem("collection", JSON.stringify(action.payload))
-    })
+    });
     builder.addCase(createCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload))
-    })
+    });
+    builder.addCase(deleteCollections.fulfilled, (state, action: PayloadAction<string[]>) => {
+      state.collections = action.payload;
+      localStorage.setItem("collections", JSON.stringify(action.payload));
+    });
+    
   },
 });
 

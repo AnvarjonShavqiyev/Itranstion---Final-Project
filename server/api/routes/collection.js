@@ -36,6 +36,46 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
+router.delete("/delete", async (req, res, next) => {
+  try {
+    const collectionIds = req.body.collectionIds;
+    if (!collectionIds) {
+      return res
+        .status(404)
+        .json({ error: "CollectionIds are required in the request body" });
+    }
+    const filter = { _id: { $in: collectionIds } };
+    await Collection.deleteMany(filter);
+    const user = await User.findById(req.body.id);
+    console.log(user);
+    if (user.role === "admin") {
+      const collections = await Collection.find().populate({
+        path: "items",
+        populate: "comments",
+      });
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    } else {
+      const doc = await User.findById(req.body.user_id)
+        .populate({
+          path: "collections",
+          populate: { path: "items", populate: "comments" },
+        })
+        .exec();
+      const collections = doc.collections;
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+});
 router.get("/:id", async (req, res, next) => {
   try {
     Collection.findById(req.params.id)
@@ -92,23 +132,6 @@ router.post("/add-col", upload.single("image"), async (req, res, next) => {
     }
   } catch (error) {
     return res.status(500).json({
-      error: error.message,
-    });
-  }
-});
-router.delete("/delete", async (req, res, next) => {
-  try {
-    const collectionIds = req.body.collectionIds;
-    if (!collectionIds) {
-      return res
-        .status(400)
-        .json({ error: "CollectionIds are required in the request body" });
-    }
-    const filter = { _id: { $in: collectionIds } };
-    const result = await Collection.deleteMany(filter);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({
       error: error.message,
     });
   }

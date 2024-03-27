@@ -153,10 +153,13 @@ router.delete("/:id", (req, res, next) => {
 });
 router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
-    const uploader = async (path) => await cloudinary.uploads(path, "Images");
-    const image = req.file;
-    const { path } = image;
-    const newPath = await uploader(path);
+    var newPath = "";
+    if (req.file) {
+      const uploader = async (path) => await cloudinary.uploads(path, "Images");
+      const image = req.file;
+      const { path } = image;
+      newPath = await uploader(path);
+    }
     const id = req.params.id;
     const updates = {
       name: req.body.name,
@@ -190,6 +193,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: error,
     });

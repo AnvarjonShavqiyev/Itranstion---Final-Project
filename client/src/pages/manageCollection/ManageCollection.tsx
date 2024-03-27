@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { createCollection, getSingleCollection, updateCollection } from '../../redux/features/collectionSlice';
 import { ToastContainer } from 'react-toastify';
-import { Collection } from '../../types/ElementTypes';
+import { Collection, User } from '../../types/ElementTypes';
 
 const ManageCollection = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -17,6 +17,7 @@ const ManageCollection = () => {
   const [topic, setTopic] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const collection = useSelector((state: RootState) => state.collections.collection) as Collection;
+  const user = useSelector((state: RootState) => state.auth.user) as User;
   
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -63,9 +64,9 @@ const ManageCollection = () => {
     formData.append('name', name);
     formData.append('image', image);
     formData.append('discreption', description);
-    formData.append('topic', topic);   
+    formData.append('topic', topic); 
+    formData.append('user_id', user._id as string);  
     if (type === 'create') {
-      formData.append('user_id', id as string);
       createCol(formData);
     } 
     if (type === 'edit') {

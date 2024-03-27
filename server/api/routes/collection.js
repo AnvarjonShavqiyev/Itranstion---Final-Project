@@ -166,7 +166,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     };
     const options = { new: true };
     await Collection.findByIdAndUpdate(id, updates, options);
-    const user = await User.findById(req.body.id);
+    const user = await User.findById(req.body.user_id);
     if (user.role === "admin") {
       const collections = await Collection.find().populate({
         path: "items",

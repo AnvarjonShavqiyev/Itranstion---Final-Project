@@ -7,7 +7,6 @@ const cloudinary = require("../helpers/cloudinary");
 const Items = require("../modules/items");
 const Collection = require("../modules/collection");
 const Comments = require("../modules/comments");
-const User = require("../modules/user")
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -117,7 +116,10 @@ router.delete("/delete", async (req, res, next) => {
     }
     const filter = { _id: { $in: itemIds } };
     await Items.deleteMany(filter);
-    const collection = await Collection.findById(req.body.collection_id)
+    const collection = await Collection.findById(req.body.collection_id).populate({
+      path: "items",
+      populate: "comments",
+    })
     return res.status(200).json({
       message:"Successfully",
       result: collection

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import defImage from '../../assets/images/k1.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { createCollection, getSingleCollection, updateCollection } from '../../redux/features/collectionSlice';
+import { createCollection, deleteItems, getSingleCollection, updateCollection } from '../../redux/features/collectionSlice';
 import { ToastContainer } from 'react-toastify';
 import { Collection, User } from '../../types/ElementTypes';
 import ItemsTable from '../../components/itemTable/ItemTable';
@@ -20,7 +20,7 @@ const ManageCollection = () => {
   const dispatch = useDispatch<AppDispatch>();
   const collection = useSelector((state: RootState) => state.collections.collection) as Collection;
   const user = useSelector((state: RootState) => state.auth.user) as User;
-  
+  const [itemIds, setItemIds] = useState<string[]>([])
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
@@ -60,6 +60,9 @@ const ManageCollection = () => {
     }
   }, [collection]);
 
+  const handleDelete = () => {
+    itemIds && dispatch(deleteItems([itemIds,collection._id]))
+  }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
@@ -77,7 +80,7 @@ const ManageCollection = () => {
   };
 
   return (
-   <>
+   collection && <>
     <AdminNav />
     <Container>
       <div className='manage-collection-wrapper'>
@@ -113,9 +116,9 @@ const ManageCollection = () => {
           <div className='actions-wrapper'>
             <Link to='/dashboard/manage-item/create/'>Add Item</Link>
             <Link to='/dashboard/manage-item/edit/'>Edit Item</Link>
-            <button>Delete</button>
+            <button onClick={() => handleDelete()}>Delete</button>
           </div>
-          <ItemsTable items={collection.items}/>
+          <ItemsTable items={collection.items} itemIds={itemIds} setItemIds={setItemIds}/>
         </div>
       }
       <ToastContainer />

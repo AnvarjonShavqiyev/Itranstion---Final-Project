@@ -93,19 +93,20 @@ const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(da
   }
 })
 const deleteItems = createAsyncThunk<string[], [string[], string]>(
-  '/collection/deletemany',
-  async ([collectionIds, id]) => {
+  '/item/deletemany',
+  async ([itemIds, collection_id]) => {
     try {
       const headers = {
         'Content-Type': 'application/json'
       };
-      const response: AxiosResponse = await instance.delete("/collection/delete", {
+      const response: AxiosResponse = await instance.delete("/item/delete", {
         headers,
-        data: { collectionIds, id }
+        data: { itemIds, collection_id }
       });
+      console.log(response)
       if(response.status === 200){
         toast.success('Items deleted :)')
-        return response.data.collections;
+        return response.data.result;
       }
     } catch (error) {
       console.error("Error deleting collections:", error);
@@ -142,6 +143,10 @@ const CollectionSlice = createSlice({
     builder.addCase(deleteCollections.fulfilled, (state, action: PayloadAction<string[]>) => {
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload));
+    });
+    builder.addCase(deleteItems.fulfilled, (state, action: PayloadAction<string[]>) => {
+      state.collection = action.payload;
+      localStorage.setItem("collection", JSON.stringify(action.payload))
     });
     
   },

@@ -25,8 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function ItemsTable({ items }: { items: any[] }) {
-  const [itemIds, setItemIds] = useState<string[]>([]);
+export default function ItemsTable({ items, itemIds, setItemIds } : { items: any[], itemIds: string[], setItemIds: React.Dispatch<React.SetStateAction<string[]>>}) {
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
 
   const handleCheckboxChange = (itemId: string) => {

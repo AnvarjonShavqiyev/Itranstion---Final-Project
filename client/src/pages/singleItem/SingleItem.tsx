@@ -63,12 +63,11 @@ const SingleItem = () => {
               </div>
               <div className='single-item-add-info'>
                 {
-                  item.additionalInfo.length > 0 && 
-                  item.additionalInfo.map(el => {
-                    const keys = Object.keys(el); 
-                    const values = Object.values(el); 
-                    return <p>{keys[0]}:{values[0]}</p>
-                  })                  
+                  JSON.parse(item.additionalInfo).map((item:string, index:number) => (
+                    Object.entries(item).map(([key, value]) => (
+                      <p key={index}>{`${key}: ${value}`}</p>
+                    ))
+                  ))
                 }
               </div>
           </div>

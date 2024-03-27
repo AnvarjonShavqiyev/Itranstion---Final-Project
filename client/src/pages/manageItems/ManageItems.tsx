@@ -9,35 +9,31 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { addItem } from "../../redux/features/collectionSlice";
 import { Collection, User } from "../../types/ElementTypes";
 import { ToastContainer } from "react-toastify";
-interface InputField {
-  id: number;
-  value: string;
-}
+
 const ManageItems = () => {
   const {type} = useParams()
   const [image, setImage] = useState<File | null | any>(null);
   const [name, setName] = useState<string>('');
   const [tags, setTags] = useState<string>('')
-  const [inputFields, setInputFields] = useState<InputField[]>([{ id: 0, value: '' }]);
+  const [keyInput, setKeyInput] = useState<string>('');
+  const [valueInput, setValueInput] = useState<string>('');
+  const [items, setItems] = useState<{ [key: string]: string }[]>([]);
   const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((state:RootState) => state.auth.user) as User
   const collection = useSelector((state:RootState) => state.collections.collection) as Collection
-  const handleAddFields = () => {
-    const values = [...inputFields];
-    values.push({ id: inputFields.length, value: '' });
-    setInputFields(values);
+  const handleKeyInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyInput(event.target.value);
   };
-  const handleInputChange = (id: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const values = [...inputFields];
-    const index = values.findIndex(field => field.id === id);
-    if (index !== -1) {
-      values[index].value = event.target.value;
-      setInputFields(values);
-    }
+
+  const handleValueInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueInput(event.target.value);
   };
-  const handleRemoveFields = (id: number) => {
-    const values = inputFields.filter(field => field.id !== id);
-    setInputFields(values);
+
+  const handleButtonClick = () => {
+    const newItem = { [keyInput]: valueInput };
+    setItems([...items, newItem]);
+    setKeyInput('');
+    setValueInput('');
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -51,7 +47,8 @@ const ManageItems = () => {
     formData.append('image', image);
     formData.append('tags', tags);
     formData.append('user_id', user._id); 
-    formData.append('collection_id', collection._id); 
+    formData.append('collection_id', collection._id);
+    formData.append('additionalInfo', JSON.stringify(items));
     if (type === 'create'){
       dispatch(addItem(formData))
     }
@@ -84,25 +81,28 @@ const ManageItems = () => {
                 <input onChange={(e) => setTags(e.target.value)} value={tags} required={true} type="text" id="topic" />
               </div>
               <div>
-                {inputFields.map(inputField => (
-                  <div className="additional-inputs" key={inputField.id}>
-                    <input
-                      type="text"
-                      placeholder="Key"
-                      value={inputField.value}
-                      onChange={event => handleInputChange(inputField.id, event)}
-                    />
-                    <p>:</p>
-                    <input
-                      type="text"
-                      placeholder="Value"
-                      value={inputField.value}
-                      onChange={event => handleInputChange(inputField.id, event)}
-                    />
-                    <button type="button" className="addInput-btn" onClick={() => handleRemoveFields(inputField.id)}>Remove</button>
-                  </div>
-                ))}
-                <button type="button" className="create-btn" onClick={handleAddFields}>Add Information</button>
+                <div>
+                  <input
+                    type="text"
+                    value={keyInput}
+                    onChange={handleKeyInputChange}
+                    placeholder="Enter key..."
+                  />
+                  <input
+                    type="text"
+                    value={valueInput}
+                    onChange={handleValueInputChange}
+                    placeholder="Enter value..."
+                  />
+                  <button type="button" onClick={handleButtonClick}>Add</button>
+                  {
+                    items.map((item, index) => (
+                      Object.entries(item).map(([key, value]) => (
+                        <p key={index}>{`${key}:${value}`}</p>
+                      ))
+                    ))
+                  }
+                </div>
               </div>
               <button style={{width:"100%"}} className="addInput-btn">Add Item</button>
             </div>

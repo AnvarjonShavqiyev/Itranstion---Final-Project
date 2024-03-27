@@ -35,7 +35,7 @@ export type Item = {
     name: string;
     likes: string[];
     comments: Comment[];
-    additionalInfo: Record<string, any>[];
+    additionalInfo: string;
   };
 export type KeySearchResult = {
     collections: Collection[]

@@ -7,6 +7,7 @@ const cloudinary = require("../helpers/cloudinary");
 const Items = require("../modules/items");
 const Collection = require("../modules/collection");
 const Comments = require("../modules/comments");
+const User = require("../modules/user")
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -130,8 +131,30 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
   }
 
   collection.items.push(item.id);
-
   await collection.save();
+  const user = await User.findById(req.body.user_id);
+  if (user.role === "admin") {
+    const collections = await Collection.find().populate({
+      path: "items",
+      populate: "comments",
+    });
+    res.status(200).json({
+      message: "Successfully",
+      collections: collections,
+    });
+  } else {
+    const doc = await User.findById(req.body.user_id)
+      .populate({
+        path: "collections",
+        populate: { path: "items", populate: "comments" },
+      })
+      .exec();
+    const collections = doc.collections;
+    res.status(200).json({
+      message: "Successfully",
+      collections: collections,
+    });
+  }
   try {
     res.status(200).json({
       message: "Successfully",

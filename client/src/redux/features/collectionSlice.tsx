@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import instance from "../../api/axios";
-import { Collection } from "../../types/ElementTypes";
+import { Collection, Item } from "../../types/ElementTypes";
 import { toast } from "react-toastify";
 
 interface CollectionsState {
@@ -56,13 +56,24 @@ const deleteCollections = createAsyncThunk<string[], [string[], string]>(
     }
   }
 );
-
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/collection/add-col", data);
     console.log(response)
     if (response.status === 200) {
       toast.success("Collection created :)");
+    }
+    return response.data.collections;
+  }catch(error){
+    console.log(error)
+  }
+})
+const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(data:FormData) => {
+  try{
+    const response: AxiosResponse = await instance.post("/item/add-item", data);
+    console.log(response)
+    if (response.status === 200) {
+      toast.success("Item added :)");
     }
     return response.data.collections;
   }catch(error){
@@ -99,6 +110,10 @@ const CollectionSlice = createSlice({
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload))
     });
+    builder.addCase(addItem.fulfilled, (state, action: PayloadAction<Item>) => {
+      state.collections = action.payload;
+      localStorage.setItem("collections", JSON.stringify(action.payload))
+    });
     builder.addCase(updateCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload))
@@ -111,5 +126,5 @@ const CollectionSlice = createSlice({
   },
 });
 
-export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection };
+export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection, addItem };
 export default CollectionSlice.reducer;

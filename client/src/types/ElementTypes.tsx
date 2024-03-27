@@ -29,14 +29,14 @@ export type Comment = {
     item_id: string;
 };
 export type Item = {
-    _id: string,
-    image: string,
-    tags: string,
-    name: string,
-    likes: string[],
-    comments: Comment[],
-    additionalInfo: object[]
-}
+    _id: string;
+    image: string;
+    tags: string;
+    name: string;
+    likes: string[];
+    comments: Comment[];
+    additionalInfo: Record<string, any>[];
+  };
 export type KeySearchResult = {
     collections: Collection[]
     comments: Comment[]

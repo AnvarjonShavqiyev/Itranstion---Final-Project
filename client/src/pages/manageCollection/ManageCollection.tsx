@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './ManageCollection.scss';
 import AdminNav from '../../components/adminNav/AdminNav';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,8 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createCollection, getSingleCollection, updateCollection } from '../../redux/features/collectionSlice';
 import { ToastContainer } from 'react-toastify';
 import { Collection, User } from '../../types/ElementTypes';
+import ItemsTable from '../../components/itemTable/ItemTable';
+import { Container } from '@mui/material';
 
 const ManageCollection = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -30,7 +32,6 @@ const ManageCollection = () => {
   };
 
   const updateCol = (formData: FormData) => {
-    console.log(formData.get('image'))
     id && dispatch(updateCollection([formData, id]));
   };
 
@@ -76,8 +77,10 @@ const ManageCollection = () => {
   };
 
   return (
-    <div className='manage-collection-wrapper'>
-      <AdminNav />
+   <>
+    <AdminNav />
+    <Container>
+      <div className='manage-collection-wrapper'>
       <form className='create-content-wrapper' onSubmit={handleSubmit}>
         <div className="img-input">
           {type === 'create' ? 
@@ -103,8 +106,23 @@ const ManageCollection = () => {
         </div>
         <button type='submit' className='create-btn'>{type === 'create' ? 'Create' : 'Update'}</button>
       </form>
+      {
+        type === 'edit' && 
+        <div className='admin-items-wrapper'>
+          <h3 className='admin-editItem-title'>Items of {collection.name}</h3>
+          <div className='actions-wrapper'>
+            <Link to='/dashboard/manage-item/create/'>Add Item</Link>
+            <Link to='/dashboard/manage-item/edit/'>Edit Item</Link>
+            <button>Delete</button>
+          </div>
+          <ItemsTable items={collection.items}/>
+        </div>
+      }
       <ToastContainer />
     </div>
+    </Container>
+   </>
+   
   );
 };
 

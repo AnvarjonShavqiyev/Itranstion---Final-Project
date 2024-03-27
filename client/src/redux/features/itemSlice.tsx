@@ -90,7 +90,6 @@ const ItemsSlice = createSlice({
       })
       builder.addCase(addComment.fulfilled,(state, action: PayloadAction<object>) => {
         state.item = action.payload
-        console.log(action.payload,11)
         localStorage.setItem("item", JSON.stringify(action.payload));   
       })
   },

@@ -206,7 +206,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     const id = req.params.id;
     const updates = {
       name: req.body.name,
-      image: newPath,
+      image: newPath || req.body.image,
       tags: req.body.tags,
       additionalInfo: req.body.additionalInfo,
     };

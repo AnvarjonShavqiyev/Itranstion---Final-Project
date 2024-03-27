@@ -30,6 +30,7 @@ const ManageCollection = () => {
   };
 
   const updateCol = (formData: FormData) => {
+    console.log(formData.get('image'))
     id && dispatch(updateCollection([formData, id]));
   };
 
@@ -84,7 +85,7 @@ const ManageCollection = () => {
             :
             <img width={500} height={400} src={image} alt="" />
           }
-          <input type="file" required={true} onChange={handleImageChange} />
+          <input type="file" onChange={handleImageChange} />
         </div>
         <div className='collection-info-inputs'>
           <div className='input-wrapper'>

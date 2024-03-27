@@ -165,11 +165,30 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       topic: req.body.topic,
     };
     const options = { new: true };
-    const result = await Collection.findByIdAndUpdate(id, updates, options);
-    res.status(200).json({
-      result,
-      message: "Collection updated",
-    });
+    await Collection.findByIdAndUpdate(id, updates, options);
+    const user = await User.findById(req.body.id);
+    if (user.role === "admin") {
+      const collections = await Collection.find().populate({
+        path: "items",
+        populate: "comments",
+      });
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    } else {
+      const doc = await User.findById(req.body.user_id)
+        .populate({
+          path: "collections",
+          populate: { path: "items", populate: "comments" },
+        })
+        .exec();
+      const collections = doc.collections;
+      res.status(200).json({
+        message: "Successfully",
+        collections: collections,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       error: error,

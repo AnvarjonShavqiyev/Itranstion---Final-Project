@@ -12,7 +12,7 @@ interface CollectionsState {
 
 const initialState: CollectionsState = {
   collections: JSON.parse(localStorage.getItem("collections") ?? "null"),
-  collection: JSON.parse(localStorage.getItem("collection") ?? "null")
+  collection: JSON.parse(localStorage.getItem("collection") ?? "null"),
 };
 
 const getCollections = createAsyncThunk<object>("/collection", async () => {
@@ -57,7 +57,6 @@ const deleteCollections = createAsyncThunk<string[], [string[], string]>(
   }
 );
 
-
 const createCollection = createAsyncThunk<Collection,FormData>("/collection/create", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/collection/add-col", data);
@@ -70,6 +69,19 @@ const createCollection = createAsyncThunk<Collection,FormData>("/collection/crea
     console.log(error)
   }
 })
+const updateCollection = createAsyncThunk<Collection,[FormData, string]>("/collection/update", async([data,id]) => {
+  try{
+    const response: AxiosResponse = await instance.patch(`/collection/${id}`, data);
+    console.log(response)
+    if (response.status === 200) {
+      toast.success("Collection updated :)");
+    }
+    return response.data.collections;
+  }catch(error){
+    console.log(error)
+  }
+})
+
 const CollectionSlice = createSlice({
   name: "collection",
   initialState,
@@ -87,6 +99,10 @@ const CollectionSlice = createSlice({
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload))
     });
+    builder.addCase(updateCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
+      state.collections = action.payload;
+      localStorage.setItem("collections", JSON.stringify(action.payload))
+    });
     builder.addCase(deleteCollections.fulfilled, (state, action: PayloadAction<string[]>) => {
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload));
@@ -95,5 +111,5 @@ const CollectionSlice = createSlice({
   },
 });
 
-export { getCollections, getSingleCollection, createCollection, deleteCollections };
+export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection };
 export default CollectionSlice.reducer;

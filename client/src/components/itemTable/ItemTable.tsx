@@ -58,7 +58,7 @@ export default function ItemsTable({ items }: { items: any[] }) {
                   checked={isAllChecked}
                 />
               </StyledTableCell>
-              <StyledTableCell align="left">Collection name</StyledTableCell>
+              <StyledTableCell align="left">Items name</StyledTableCell>
               <StyledTableCell align="left">Tags</StyledTableCell>
               <StyledTableCell align="left">Count of Likes</StyledTableCell>
               <StyledTableCell align="left">Count of Comments</StyledTableCell>

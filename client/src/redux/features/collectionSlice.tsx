@@ -71,7 +71,6 @@ const createCollection = createAsyncThunk<Collection,FormData>("/collection/crea
 const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/item/add-item", data);
-    console.log(response)
     if (response.status === 200) {
       toast.success("Item added :)");
     }

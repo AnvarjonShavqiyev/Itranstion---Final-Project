@@ -123,42 +123,23 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
   });
 
   const result = await item.save();
-
   const collection = await Collection.findById(req.body.collection_id);
-
   if (!collection) {
     throw Error("Collection not found");
   }
 
   collection.items.push(item.id);
   await collection.save();
-  const user = await User.findById(req.body.user_id);
-  if (user.role === "admin") {
-    const collections = await Collection.find().populate({
-      path: "items",
-      populate: "comments",
-    });
-    res.status(200).json({
-      message: "Successfully",
-      collections: collections,
-    });
-  } else {
-    const doc = await User.findById(req.body.user_id)
-      .populate({
-        path: "collections",
-        populate: { path: "items", populate: "comments" },
-      })
-      .exec();
-    const collections = doc.collections;
-    res.status(200).json({
-      message: "Successfully",
-      collections: collections,
-    });
-  }
+  const collectionR = await Collection.findById(req.body.collection_id)
+  .populate({
+    path: "items",
+    populate: "comments",
+  })
+  .exec();
   try {
     res.status(200).json({
       message: "Successfully",
-      item: result,
+      item: collectionR,
     });
   } catch (error) {
     return res.status(500).json({

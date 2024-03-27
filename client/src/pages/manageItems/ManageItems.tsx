@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { addItem } from "../../redux/features/collectionSlice";
 import { Collection, User } from "../../types/ElementTypes";
+import { ToastContainer } from "react-toastify";
 interface InputField {
   id: number;
   value: string;
@@ -74,7 +75,7 @@ const ManageItems = () => {
             </div>
             <div className='collection-info-inputs'>
               <div className='input-wrapper'>
-                <label htmlFor="collectionName">Collection name:</label>
+                <label htmlFor="collectionName">Item name:</label>
                 <input value={name} onChange={(e) => setName(e.target.value)} type="text" required={true} id="collectionName" />
               </div>
               <div className='input-wrapper'>
@@ -107,6 +108,7 @@ const ManageItems = () => {
             </div>
           </form>
         </div>
+        <ToastContainer/>
       </Container>
     </>
   )

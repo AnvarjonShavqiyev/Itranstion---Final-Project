@@ -68,17 +68,6 @@ const createCollection = createAsyncThunk<Collection,FormData>("/collection/crea
     console.log(error)
   }
 })
-const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(data:FormData) => {
-  try{
-    const response: AxiosResponse = await instance.post("/item/add-item", data);
-    if (response.status === 200) {
-      toast.success("Item added :)");
-    }
-    return response.data.collections;
-  }catch(error){
-    console.log(error)
-  }
-})
 const updateCollection = createAsyncThunk<Collection,[FormData, string]>("/collection/update", async([data,id]) => {
   try{
     const response: AxiosResponse = await instance.patch(`/collection/${id}`, data);
@@ -91,6 +80,39 @@ const updateCollection = createAsyncThunk<Collection,[FormData, string]>("/colle
     console.log(error)
   }
 })
+
+const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(data:FormData) => {
+  try{
+    const response: AxiosResponse = await instance.post("/item/add-item", data);
+    if (response.status === 200) {
+      toast.success("Item added :)");
+    }
+    return response.data.item;
+  }catch(error){
+    console.log(error)
+  }
+})
+const deleteItems = createAsyncThunk<string[], [string[], string]>(
+  '/collection/deletemany',
+  async ([collectionIds, id]) => {
+    try {
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      const response: AxiosResponse = await instance.delete("/collection/delete", {
+        headers,
+        data: { collectionIds, id }
+      });
+      if(response.status === 200){
+        toast.success('Items deleted :)')
+        return response.data.collections;
+      }
+    } catch (error) {
+      console.error("Error deleting collections:", error);
+      throw error;
+    }
+  }
+);
 
 const CollectionSlice = createSlice({
   name: "collection",
@@ -110,8 +132,8 @@ const CollectionSlice = createSlice({
       localStorage.setItem("collections", JSON.stringify(action.payload))
     });
     builder.addCase(addItem.fulfilled, (state, action: PayloadAction<Item>) => {
-      state.collections = action.payload;
-      localStorage.setItem("collections", JSON.stringify(action.payload))
+      state.collection = action.payload;
+      localStorage.setItem("collection", JSON.stringify(action.payload))
     });
     builder.addCase(updateCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collections = action.payload;
@@ -125,5 +147,5 @@ const CollectionSlice = createSlice({
   },
 });
 
-export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection, addItem };
+export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection, addItem, deleteItems };
 export default CollectionSlice.reducer;

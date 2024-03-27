@@ -107,6 +107,27 @@ router.get("/:id", async (req, res, next) => {
     });
   }
 });
+router.delete("/delete", async (req, res, next) => {
+  try {
+    const itemIds = req.body.itemIds;
+    if (!itemIds) {
+      return res
+        .status(404)
+        .json({ error: "ItemIds are required in the request body" });
+    }
+    const filter = { _id: { $in: itemIds } };
+    await Items.deleteMany(filter);
+    const collection = await Collection.findById(req.body.collection_id)
+    return res.status(200).json({
+      message:"Successfully",
+      result: collection
+    })
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+});
 router.post("/add-item", upload.single("image"), async (req, res, next) => {
   const uploader = async (path) => await cloudinary.uploads(path, "Images");
   const image = req.file;

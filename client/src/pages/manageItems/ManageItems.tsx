@@ -36,6 +36,11 @@ const ManageItems = () => {
     setKeyInput('');
     setValueInput('');
   };
+  const handleRemoveButtonClick = (indexToRemove: number) => {
+    const updatedItems = [...items];
+    updatedItems.splice(indexToRemove, 1);
+    setItems(updatedItems); 
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
@@ -105,7 +110,7 @@ const ManageItems = () => {
                 <input onChange={(e) => setTags(e.target.value)} value={tags} required={true} type="text" id="topic" />
               </div>
               <div>
-                <div>
+                <div className="additional-inputs">
                   <input
                     type="text"
                     value={keyInput}
@@ -117,16 +122,22 @@ const ManageItems = () => {
                     value={valueInput}
                     onChange={handleValueInputChange}
                     placeholder="Enter value..."
+                    className=""
                   />
-                  <button type="button" onClick={handleButtonClick}>Add</button>
-                  {
-                    items.map((item, index) => (
-                      Object.entries(item).map(([key, value]) => (
-                        <p key={index}>{`${key}:${value}`}</p>
-                      ))
-                    ))
-                  }
+                  <button type="button" className="addInput-btn" onClick={handleButtonClick}>Add</button>
                 </div>
+                {
+                  items.map((item, index) => (
+                    <div className="additional-info" key={index}>
+                      {
+                        Object.entries(item).map(([key, value]) => (
+                          <p key={key}>{`${key}:${value}`}</p>
+                        ))
+                      } 
+                      <button type="button" className="addInput-btn" onClick={() => handleRemoveButtonClick(index)}>Remove</button>
+                    </div>
+                  ))
+                }
               </div>
               <button style={{width:"100%"}} className="addInput-btn">{type === 'edit' ? 'Edit' : 'Add'} Item</button>
             </div>

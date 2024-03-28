@@ -2,16 +2,17 @@ import { useParams } from "react-router-dom"
 import { Container } from "../../utils/Utils"
 import AdminNav from "../../components/adminNav/AdminNav"
 import defImage from '../../assets/images/k1.jpg';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './ManageItems.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addItem } from "../../redux/features/collectionSlice";
-import { Collection, User } from "../../types/ElementTypes";
+import { addItem, editItem } from "../../redux/features/collectionSlice";
+import { Collection, Item, User } from "../../types/ElementTypes";
 import { ToastContainer } from "react-toastify";
+import { getSingleItem } from "../../redux/features/itemSlice";
 
 const ManageItems = () => {
-  const {type} = useParams()
+  const { type, id } = useParams<{ type: string; id: string }>();
   const [image, setImage] = useState<File | null | any>(null);
   const [name, setName] = useState<string>('');
   const [tags, setTags] = useState<string>('')
@@ -21,14 +22,14 @@ const ManageItems = () => {
   const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((state:RootState) => state.auth.user) as User
   const collection = useSelector((state:RootState) => state.collections.collection) as Collection
+  const item = useSelector((state:RootState) => state.items.item) as Item
+
   const handleKeyInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyInput(event.target.value);
   };
-
   const handleValueInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueInput(event.target.value);
   };
-
   const handleButtonClick = () => {
     const newItem = { [keyInput]: valueInput };
     setItems([...items, newItem]);
@@ -53,9 +54,30 @@ const ManageItems = () => {
       dispatch(addItem(formData))
     }
     if (type === 'edit'){
-
+      id && dispatch(editItem([formData, id]))
     }
   }
+  useEffect(() => {
+    const loadData = async () => {
+      if (type === 'edit' && id) {
+        await dispatch(getSingleItem(id));
+      }
+      if (type === 'create') {
+        setImage(null);
+        setName('');
+      }
+    };
+
+    loadData();
+  }, []);
+  useEffect(() => {
+    if (type === 'edit' && item) {
+      setImage(item.image);
+      setName(item.name);
+      setTags(item.tags)
+    }
+  }, [item]);
+
   return (
     <>
       <AdminNav/>
@@ -104,7 +126,7 @@ const ManageItems = () => {
                   }
                 </div>
               </div>
-              <button style={{width:"100%"}} className="addInput-btn">Add Item</button>
+              <button style={{width:"100%"}} className="addInput-btn">{type === 'edit' ? 'Edit' : 'Add'} Item</button>
             </div>
           </form>
         </div>

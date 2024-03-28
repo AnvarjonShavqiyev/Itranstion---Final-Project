@@ -24,6 +24,7 @@ const AppRoutes: React.FC = () => {
         <Route path="" element={<Dashboard />}/>
         <Route path="manage-collection/:type/:id" element={<ManageCollection />} />
         <Route path="manage-item/:type/" element={<ManageItems />} />
+        <Route path="manage-item/:type/:id" element={<ManageItems />} />
       </Route>
     </Routes>
   );

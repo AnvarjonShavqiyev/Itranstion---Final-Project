@@ -80,7 +80,6 @@ const updateCollection = createAsyncThunk<Collection,[FormData, string]>("/colle
     console.log(error)
   }
 })
-
 const addItem = createAsyncThunk<Item,FormData>("/collection/add-item", async(data:FormData) => {
   try{
     const response: AxiosResponse = await instance.post("/item/add-item", data);
@@ -114,6 +113,17 @@ const deleteItems = createAsyncThunk<string[], [string[], string]>(
     }
   }
 );
+const editItem = createAsyncThunk<Item,[FormData, string]>('/collection/edit-item',async([data, id]) => {
+  try{
+    const response: AxiosResponse = await instance.post(`/item/${id}`, data);
+    if (response.status === 200) {
+      toast.success("Item edited :)");
+    }
+    return response.data.item;
+  }catch(error){
+    console.log(error)
+  }
+})
 
 const CollectionSlice = createSlice({
   name: "collection",
@@ -136,6 +146,10 @@ const CollectionSlice = createSlice({
       state.collection = action.payload;
       localStorage.setItem("collection", JSON.stringify(action.payload))
     });
+    builder.addCase(editItem.fulfilled, (state, action: PayloadAction<Item>) => {
+      state.collection = action.payload;
+      localStorage.setItem("collection", JSON.stringify(action.payload))
+    });
     builder.addCase(updateCollection.fulfilled, (state, action: PayloadAction<Collection>) => {
       state.collections = action.payload;
       localStorage.setItem("collections", JSON.stringify(action.payload))
@@ -152,5 +166,5 @@ const CollectionSlice = createSlice({
   },
 });
 
-export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection, addItem, deleteItems };
+export { getCollections, getSingleCollection, createCollection, deleteCollections, updateCollection, addItem, deleteItems,editItem };
 export default CollectionSlice.reducer;

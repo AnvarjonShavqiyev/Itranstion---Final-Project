@@ -115,7 +115,7 @@ const ManageCollection = () => {
           <h3 className='admin-editItem-title'>Items of {collection.name}</h3>
           <div className='actions-wrapper'>
             <Link to='/dashboard/manage-item/create/'>Add Item</Link>
-            <Link to='/dashboard/manage-item/edit/'>Edit Item</Link>
+            <Link to={`/dashboard/manage-item/edit/${itemIds[itemIds.length-1]}`}>Edit Item</Link>
             <button onClick={() => handleDelete()}>Delete</button>
           </div>
           <ItemsTable items={collection.items} itemIds={itemIds} setItemIds={setItemIds}/>

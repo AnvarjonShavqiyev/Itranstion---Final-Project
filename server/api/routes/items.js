@@ -145,7 +145,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     like: 0
   });
 
-  const result = await item.save();
+  await item.save();
   const collection = await Collection.findById(req.body.collection_id);
   if (!collection) {
     throw Error("Collection not found");
@@ -238,11 +238,23 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       additionalInfo: req.body.additionalInfo,
     };
     const options = { new: true };
-    const result = await Items.findByIdAndUpdate(id, updates, options);
-    res.status(200).json({
-      result,
-      message: "Item updated",
-    });
+    await Items.findByIdAndUpdate(id, updates, options);
+    const collectionR = await Collection.findById(req.body.collection_id)
+    .populate({
+      path: "items",
+      populate: "comments",
+    })
+    .exec();
+    try {
+      res.status(200).json({
+        message: "Successfully",
+        item: collectionR,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       error: error,

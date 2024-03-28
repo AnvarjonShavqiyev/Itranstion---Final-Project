@@ -35,6 +35,7 @@ const signup = createAsyncThunk<SignUpResponse, authUser>(
       if (error.response && error.response.status === 422) {
         toast.error("Email or Name is already in use!");
       } else {
+        console.log(error)
         toast.error("Something went wrong!");
       }
       throw error;

@@ -18,7 +18,7 @@ export default function SignUp() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data: authUser = {
-      username: formData.get('name')?.toString() || '',
+      name: formData.get('name')?.toString() || '',
       email: formData.get('email')?.toString() || '', 
       password: formData.get('password')?.toString() || '',
     };

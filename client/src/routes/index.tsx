@@ -9,6 +9,7 @@ import Private from "./private/Private";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ManageCollection from "../pages/manageCollection/ManageCollection";
 import ManageItems from "../pages/manageItems/ManageItems";
+import Users from "../pages/users/Users";
 
 const AppRoutes: React.FC = () => {
   const [search, setSearch] = useState<string>("");
@@ -25,6 +26,7 @@ const AppRoutes: React.FC = () => {
         <Route path="manage-collection/:type/:id" element={<ManageCollection />} />
         <Route path="manage-item/:type/" element={<ManageItems />} />
         <Route path="manage-item/:type/:id" element={<ManageItems />} />
+        <Route path="user-management" element={<Users/>} />
       </Route>
     </Routes>
   );

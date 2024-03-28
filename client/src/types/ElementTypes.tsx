@@ -6,8 +6,20 @@ export type User = {
     role: string,
     collections: Collection[],
 }
+export type UserManagement = {
+    _id: any
+    id:string,
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+    lstLogTime: string,
+    regTime: string,
+    status:string
+}
+
 export type authUser = {
-    username: string,
+    name:string,
     email: string,
     password: string
 }

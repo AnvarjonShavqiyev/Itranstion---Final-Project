@@ -115,7 +115,7 @@ const deleteItems = createAsyncThunk<string[], [string[], string]>(
 );
 const editItem = createAsyncThunk<Item,[FormData, string]>('/collection/edit-item',async([data, id]) => {
   try{
-    const response: AxiosResponse = await instance.post(`/item/${id}`, data);
+    const response: AxiosResponse = await instance.patch(`/item/${id}`, data);
     if (response.status === 200) {
       toast.success("Item edited :)");
     }

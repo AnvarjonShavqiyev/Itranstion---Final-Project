@@ -30,12 +30,15 @@ function getTime() {
 const upload = multer({ storage: storage });
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Items.find().sort({date:-1}).populate("comments").exec();
+    const result = await Items.find()
+      .sort({ date: -1 })
+      .populate("comments")
+      .exec();
     const tags = [];
     result.forEach((element) => {
       element.tags.split("#").forEach((tag) => {
         !tags.includes(tag) && tag.length > 0 && tags.push(tag);
-      })
+      });
     });
     res.status(200).json({
       result: result,
@@ -66,24 +69,24 @@ router.get("/search", async (req, res, next) => {
         const result = {
           collections,
           comments,
-          items
+          items,
         };
         res.status(200).json({
           result: result,
         });
-      } 
+      }
     }
     if (tag) {
       const regexKey = new RegExp(tag, "i");
       const items = await Items.find({ tags: { $regex: regexKey } }).exec();
       if (items) {
         const result = {
-          items
+          items,
         };
         res.status(200).json({
           result: result,
         });
-      } 
+      }
     }
   } catch (error) {
     console.error("Error in search:", error);
@@ -116,14 +119,16 @@ router.delete("/delete", async (req, res, next) => {
     }
     const filter = { _id: { $in: itemIds } };
     await Items.deleteMany(filter);
-    const collection = await Collection.findById(req.body.collection_id).populate({
+    const collection = await Collection.findById(
+      req.body.collection_id
+    ).populate({
       path: "items",
       populate: "comments",
-    })
+    });
     return res.status(200).json({
-      message:"Successfully",
-      result: collection
-    })
+      message: "Successfully",
+      result: collection,
+    });
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -142,7 +147,7 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
     tags: req.body.tags,
     additionalInfo: req.body.additionalInfo,
     date: getTime(),
-    like: 0
+    like: 0,
   });
 
   await item.save();
@@ -154,11 +159,11 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
   collection.items.push(item.id);
   await collection.save();
   const collectionR = await Collection.findById(req.body.collection_id)
-  .populate({
-    path: "items",
-    populate: "comments",
-  })
-  .exec();
+    .populate({
+      path: "items",
+      populate: "comments",
+    })
+    .exec();
   try {
     res.status(200).json({
       message: "Successfully",
@@ -172,40 +177,44 @@ router.post("/add-item", upload.single("image"), async (req, res, next) => {
 });
 router.post("/like/:id", async (req, res, next) => {
   try {
-    const item = await Items.findById(req.params.id).populate("comments").exec();
-    if (!item.likes.includes(req.body.id)){
+    const item = await Items.findById(req.params.id)
+      .populate("comments")
+      .exec();
+    if (!item.likes.includes(req.body.id)) {
       item.likes.push(req.body.id);
       await item.save();
       return res.status(200).json({
-        item: item
+        item: item,
       });
     }
     return res.status(500).json({
-      message: "Already Liked"
+      message: "Already Liked",
     });
   } catch (error) {
     return res.status(500).json({
-      error: error.message
+      error: error.message,
     });
   }
 });
 router.post("/unlike/:id", async (req, res, next) => {
   try {
-    const item = await Items.findById(req.params.id).populate("comments").exec();
+    const item = await Items.findById(req.params.id)
+      .populate("comments")
+      .exec();
     const index = item.likes.indexOf(req.body.id);
     if (index !== -1) {
       item.likes.splice(index, 1);
       await item.save();
       return res.status(200).json({
-        item: item
+        item: item,
       });
     }
     return res.status(500).json({
-      message: "Already Unliked"
+      message: "Already Unliked",
     });
   } catch (error) {
     return res.status(500).json({
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -226,10 +235,13 @@ router.delete("/:id", (req, res, next) => {
 });
 router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
-    const uploader = async (path) => await cloudinary.uploads(path, "Images");
-    const image = req.file;
-    const { path } = image;
-    const newPath = await uploader(path);
+    var newPath = "";
+    if (req.file) {
+      const uploader = async (path) => await cloudinary.uploads(path, "Images");
+      const image = req.file;
+      const { path } = image;
+      newPath = await uploader(path);
+    }
     const id = req.params.id;
     const updates = {
       name: req.body.name,
@@ -240,22 +252,17 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     const options = { new: true };
     await Items.findByIdAndUpdate(id, updates, options);
     const collectionR = await Collection.findById(req.body.collection_id)
-    .populate({
-      path: "items",
-      populate: "comments",
-    })
-    .exec();
-    try {
-      res.status(200).json({
-        message: "Successfully",
-        item: collectionR,
-      });
-    } catch (error) {
-      return res.status(500).json({
-        error: error.message,
-      });
-    }
+      .populate({
+        path: "items",
+        populate: "comments",
+      })
+      .exec();
+    return res.status(200).json({
+      message: "Successfully",
+      item: collectionR,
+    });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: error,
     });

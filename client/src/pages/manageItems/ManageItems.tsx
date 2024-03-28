@@ -65,6 +65,7 @@ const ManageItems = () => {
       if (type === 'create') {
         setImage(null);
         setName('');
+        setTags('')
       }
     };
 
@@ -75,6 +76,7 @@ const ManageItems = () => {
       setImage(item.image);
       setName(item.name);
       setTags(item.tags)
+      setItems(JSON.parse(item.additionalInfo))
     }
   }, [item]);
 

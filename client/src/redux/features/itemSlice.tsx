@@ -34,7 +34,10 @@ const doLike = createAsyncThunk<object, { item_id: any, id: any }>(
   'item/like',
   async ({ item_id, id }) => {
     try {
-      const response: AxiosResponse = await instance.post(`item/like/${item_id}`, { id: id });
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      const response: AxiosResponse = await instance.post(`item/like/${item_id}`, { id: id },{headers});
       return response.data.item;
     } catch (error) {
       console.error("Error liking item:", error);
@@ -46,7 +49,10 @@ const unLike = createAsyncThunk<object, { item_id: any, id: any }>(
   'item/unlike',
   async ({ item_id, id }) => {
     try {
-      const response: AxiosResponse = await instance.post(`item/unlike/${item_id}`, { id: id });
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      const response: AxiosResponse = await instance.post(`item/unlike/${item_id}`, { id: id }, {headers});
       return response.data.item;
     } catch (error) {
       console.error("Error liking item:", error);
@@ -58,7 +64,10 @@ const addComment = createAsyncThunk<object, { data: Comment }>(
   'item/add-comment',
   async ({ data }) => {
     try {
-      const response: AxiosResponse = await instance.post(`comment/add-com/`, data);
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      const response: AxiosResponse = await instance.post(`comment/add-com/`, data,{headers});
       return response.data.item;
     } catch (error) {
       console.error("Error liking item:", error);

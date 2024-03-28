@@ -39,7 +39,6 @@ const SingleItem = () => {
     }
     }));
   }
-  console.log(item)
   return (
     item && <Container>
         <ActionController/>
@@ -63,7 +62,7 @@ const SingleItem = () => {
               </div>
               <div className='single-item-add-info'>
                 {
-                  JSON.parse(item.additionalInfo).map((item:string, index:number) => (
+                 item.additionalInfo.length > 0 && JSON.parse(item.additionalInfo).map((item:string, index:number) => (
                     Object.entries(item).map(([key, value]) => (
                       <p key={index}>{`${key}: ${value}`}</p>
                     ))
